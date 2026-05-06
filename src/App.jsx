@@ -8,7 +8,7 @@ import { Menu, X, ChevronRight, BarChart3, Database, BrainCircuit, LineChart, Bu
 const COMPANY_INFO = {
   name: '(주)딥마인',
   slogan: 'We predict future',
-  description: '제조/유통/금융 데이터 분석, 인공지능 개발(수요예측, LLM 등), 공간정보 예측을 전문으로 하며, 다수의 프로젝트에서 축적된 노하우로 고객 맞춤형 AI 솔루션을 제공합니다.',
+  description: '제조/유통/금융 데이터 분석, 인공 지능 개발(수요 예측, LLM 등), 공간 정보 예측을 전문으로 하며, 다수의 프로젝트에서 축적된 노하우로 고객 맞춤형 AI 솔루션을 제공합니다.',
   ceo: '박경원',
   address: '서울특별시 금천구 벚꽃로 298, 1301호-12',
   founded: '2021년 12월 20일',
@@ -78,11 +78,11 @@ export default function App() {
               </div>
               <span className="font-bold text-2xl tracking-tight text-white">DeepMine</span>
             </div>
-            
+
             {/* 데스크탑 메뉴 */}
             <div className="hidden md:flex space-x-8">
               {['About', 'Solutions', 'History', 'Contact'].map((item) => (
-                <button 
+                <button
                   key={item}
                   onClick={() => scrollToSection(item.toLowerCase())}
                   className="text-sm font-medium text-slate-300 hover:text-white transition-colors"
@@ -94,7 +94,7 @@ export default function App() {
 
             {/* 모바일 메뉴 버튼 */}
             <div className="md:hidden flex items-center">
-              <button 
+              <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
                 className="text-slate-300 hover:text-white p-2"
               >
@@ -127,12 +127,12 @@ export default function App() {
         <section className="relative px-4 sm:px-6 lg:px-8 py-32 lg:py-48 flex flex-col items-center justify-center text-center overflow-hidden">
           {/* 배경 그라데이션 장식 */}
           <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-600/20 blur-[120px] rounded-full pointer-events-none"></div>
-          
+
           <div className="relative z-10 max-w-4xl mx-auto">
             <span className="inline-block py-1 px-3 rounded-full bg-blue-500/10 text-blue-400 text-sm font-semibold tracking-wider mb-6 border border-blue-500/20">
               AI FUTURE DEMAND FORECASTING
             </span>
-            <h1 className="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-8 leading-tight">
+            <h1 className="text-5xl md:text-7xl font-extrabold text-white tracking-tight mb-8 leading-tight break-keep">
               데이터 기반 미래 예측 솔루션 <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-500">
                 {COMPANY_INFO.name}
@@ -142,13 +142,13 @@ export default function App() {
               "{COMPANY_INFO.slogan}"
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button 
+              <button
                 onClick={() => scrollToSection('solutions')}
                 className="w-full sm:w-auto px-8 py-4 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition-all flex items-center justify-center"
               >
                 솔루션 보기 <ChevronRight className="ml-2 w-5 h-5" />
               </button>
-              <button 
+              <button
                 onClick={() => scrollToSection('contact')}
                 className="w-full sm:w-auto px-8 py-4 rounded-lg bg-[#111827] border border-slate-700 text-slate-300 font-semibold hover:bg-slate-800 transition-all"
               >
@@ -168,33 +168,23 @@ export default function App() {
                 <p className="text-lg text-slate-400 leading-relaxed mb-8">
                   {COMPANY_INFO.description}
                 </p>
-                <div className="grid grid-cols-2 gap-6">
-                  <div className="bg-[#111827] p-6 rounded-xl border border-slate-800/50">
-                    <p className="text-sm text-slate-500 mb-1">설립일</p>
-                    <p className="font-semibold text-slate-200">{COMPANY_INFO.founded}</p>
-                  </div>
-                  <div className="bg-[#111827] p-6 rounded-xl border border-slate-800/50">
-                    <p className="text-sm text-slate-500 mb-1">대표자</p>
-                    <p className="font-semibold text-slate-200">{COMPANY_INFO.ceo}</p>
-                  </div>
-                </div>
               </div>
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 rounded-2xl transform rotate-3 opacity-20 blur-lg"></div>
                 <div className="relative bg-[#111827] border border-slate-800 p-8 rounded-2xl aspect-square flex flex-col justify-center">
-                   {/* 대시보드 뉘앙스의 일러스트/UI 표현 */}
-                   <div className="space-y-4">
-                     <div className="h-8 w-1/3 bg-slate-800 rounded animate-pulse"></div>
-                     <div className="h-4 w-full bg-slate-800 rounded"></div>
-                     <div className="h-4 w-5/6 bg-slate-800 rounded"></div>
-                     <div className="h-32 w-full bg-gradient-to-t from-blue-900/50 to-transparent border-b border-blue-500/50 mt-8 rounded flex items-end">
-                        <div className="w-full flex justify-between items-end px-2 space-x-2 h-full opacity-50">
-                          {[40, 70, 45, 90, 65, 100, 80].map((h, i) => (
-                            <div key={i} className="w-full bg-blue-500 rounded-t" style={{height: `${h}%`}}></div>
-                          ))}
-                        </div>
-                     </div>
-                   </div>
+                  {/* 대시보드 뉘앙스의 일러스트/UI 표현 */}
+                  <div className="space-y-4">
+                    <div className="h-8 w-1/3 bg-slate-800 rounded animate-pulse"></div>
+                    <div className="h-4 w-full bg-slate-800 rounded"></div>
+                    <div className="h-4 w-5/6 bg-slate-800 rounded"></div>
+                    <div className="h-32 w-full bg-gradient-to-t from-blue-900/50 to-transparent border-b border-blue-500/50 mt-8 rounded flex items-end">
+                      <div className="w-full flex justify-between items-end px-2 space-x-2 h-full opacity-50">
+                        {[40, 70, 45, 90, 65, 100, 80].map((h, i) => (
+                          <div key={i} className="w-full bg-blue-500 rounded-t" style={{ height: `${h}%` }}></div>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -210,7 +200,7 @@ export default function App() {
                 데이터 수집부터 모델링, 시각화까지 고객사의 도메인에 최적화된 예측 모델을 제공합니다.
               </p>
             </div>
-            
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
               {SOLUTIONS.map((solution, idx) => (
                 <div key={idx} className="bg-[#111827] border border-slate-800 p-8 rounded-2xl hover:border-blue-500/50 transition-colors group">
@@ -231,7 +221,7 @@ export default function App() {
         <section id="history" className="py-24 bg-[#0a0f1c]">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-              
+
               {/* 연혁 */}
               <div>
                 <h2 className="text-3xl font-bold text-white mb-10">History</h2>
@@ -270,15 +260,15 @@ export default function App() {
                   <ul className="space-y-4 text-slate-300">
                     <li className="flex items-start">
                       <div className="mr-3 mt-1 text-blue-400">•</div>
-                      <span>삼성전자 무선사업부 서비스 자재 수요예측 모델 도입 초기 <b>약 38억원 절감</b></span>
+                      <span className="break-keep">삼성전자 무선사업부 서비스 자재 수요 예측 모델 도입 초기 <b>수 십억원 절감</b></span>
                     </li>
                     <li className="flex items-start">
                       <div className="mr-3 mt-1 text-blue-400">•</div>
-                      <span>지속적인 개선 및 고도화를 통해 <b>매년 수 억원의 비용 절감</b> 효과 발생</span>
+                      <span className="break-keep">지속적인 개선 및 고도화를 통해 <b>매년 수 억원의 비용 절감</b> 효과 발생</span>
                     </li>
                     <li className="flex items-start">
                       <div className="mr-3 mt-1 text-blue-400">•</div>
-                      <span>NPI 단계 초기 3개월 <b>예측 정확도 최대 84.7% 달성</b></span>
+                      <span className="break-keep">LTB 장단기 수요 예측 정확도 <b>최대 84.7% 달성</b></span>
                     </li>
                   </ul>
                 </div>
@@ -292,13 +282,13 @@ export default function App() {
         <section id="contact" className="py-24 relative overflow-hidden">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="bg-[#111827] border border-slate-800 rounded-3xl p-8 lg:p-16 flex flex-col lg:flex-row gap-12">
-              
+
               <div className="lg:w-1/2">
                 <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">프로젝트 문의하기</h2>
                 <p className="text-slate-400 mb-10">
                   기업의 데이터를 활용한 맞춤형 AI 수요예측 솔루션 도입에 대해 상담해 드립니다. 아래 연락처로 편하게 문의주세요.
                 </p>
-                
+
                 <div className="space-y-6">
                   <div className="flex items-start">
                     <Building2 className="w-6 h-6 text-blue-500 mt-1 mr-4 shrink-0" />
