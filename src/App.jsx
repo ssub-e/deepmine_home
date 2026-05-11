@@ -12,8 +12,8 @@ const COMPANY_INFO = {
   ceo: '박경원',
   address: '서울특별시 금천구 벚꽃로 298, 1301호-12',
   founded: '2021년 12월 20일',
-  email: 'contact@deepmine.co.kr', // 필요시 수정
-  phone: '02-000-0000' // 필요시 수정
+  email: 'kwpark@deepmine.co.kr',
+  phone: '010-4231-4907'
 };
 
 const SOLUTIONS = [
@@ -40,6 +40,7 @@ const SOLUTIONS = [
 ];
 
 const HISTORY = [
+  { year: '2026. 03 ~', title: '2026 AI바우처 지원사업 공급기업 등록' },
   { year: '2023. 10', title: '서비스 자재 수요예측 GPU 실사용 적용' },
   { year: '2022. 09', title: '서비스 자재 수요예측 GPU 도입 PoC' },
   { year: '2021. 12', title: '(주)딥마인 법인 설립' },
@@ -58,11 +59,44 @@ const CLIENTS = [
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [status, setStatus] = useState('idle'); // idle, loading, success, error
+
   const scrollToSection = (id) => {
     setIsMenuOpen(false);
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setStatus('loading');
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      if (res.ok) {
+        setStatus('success');
+        setFormData({ name: '', email: '', message: '' });
+        alert("문의가 성공적으로 접수되었습니다.");
+      } else {
+        setStatus('error');
+        alert("오류가 발생했습니다. 잠시 후 다시 시도해주세요.");
+      }
+    } catch (error) {
+      setStatus('error');
+      alert("네트워크 오류가 발생했습니다.");
+    } finally {
+      setStatus('idle');
     }
   };
 
@@ -315,21 +349,57 @@ export default function App() {
               </div>
 
               <div className="lg:w-1/2">
-                <form className="space-y-4" onSubmit={(e) => { e.preventDefault(); alert("문의가 접수되었습니다. (데모 버전)"); }}>
+                <form className="space-y-4" onSubmit={handleSubmit}>
                   <div>
                     <label className="block text-sm font-medium text-slate-400 mb-1">회사명 / 담당자명</label>
-                    <input type="text" className="w-full bg-[#0B1120] border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors" placeholder="예: (주)딥마인 / 홍길동" required />
+                    <input 
+                      type="text" 
+                      name="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      className="w-full bg-[#0B1120] border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors" 
+                      placeholder="예: (주)딥마인 / 홍길동" 
+                      required 
+                    />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-slate-400 mb-1">이메일</label>
-                    <input type="email" className="w-full bg-[#0B1120] border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors" placeholder="company@email.com" required />
+                    <input 
+                      type="email" 
+                      name="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      className="w-full bg-[#0B1120] border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors" 
+                      placeholder="company@email.com" 
+                      required 
+                    />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-slate-400 mb-1">문의 내용</label>
-                    <textarea rows="4" className="w-full bg-[#0B1120] border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors" placeholder="도입을 희망하시는 데이터 분야나 솔루션에 대해 간략히 적어주세요." required></textarea>
+                    <textarea 
+                      name="message"
+                      value={formData.message}
+                      onChange={handleChange}
+                      rows="4" 
+                      className="w-full bg-[#0B1120] border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors" 
+                      placeholder="도입을 희망하시는 데이터 분야나 솔루션에 대해 간략히 적어주세요." 
+                      required
+                    ></textarea>
                   </div>
-                  <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors">
-                    문의 남기기
+                  <button 
+                    type="submit" 
+                    disabled={status === 'loading'}
+                    className={`w-full ${status === 'loading' ? 'bg-blue-800' : 'bg-blue-600 hover:bg-blue-700'} text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center`}
+                  >
+                    {status === 'loading' ? (
+                      <>
+                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        전송 중...
+                      </>
+                    ) : '문의 남기기'}
                   </button>
                 </form>
               </div>
