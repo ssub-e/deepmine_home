@@ -13,7 +13,8 @@ const COMPANY_INFO = {
   address: '서울특별시 금천구 벚꽃로 298, 1301호-12',
   founded: '2021년 12월 20일',
   email: 'kwpark@deepmine.co.kr',
-  phone: '010-4231-4907'
+  phone: '010-4231-4907',
+  businessNumber: '116-81-78909'
 };
 
 const SOLUTIONS = [
@@ -58,6 +59,8 @@ const CLIENTS = [
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
+  const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
 
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState('idle'); // idle, loading, success, error
@@ -155,6 +158,90 @@ export default function App() {
           </div>
         )}
       </nav>
+
+      {/* 개인정보처리방침 모달 */}
+      {isPrivacyModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
+          <div 
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setIsPrivacyModalOpen(false)}
+          ></div>
+          <div className="relative bg-[#111827] border border-slate-800 w-full max-w-2xl max-h-[80vh] overflow-y-auto rounded-2xl p-8 shadow-2xl">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-bold text-white">개인정보처리방침</h3>
+              <button 
+                onClick={() => setIsPrivacyModalOpen(false)}
+                className="text-slate-400 hover:text-white p-2"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            <div className="text-slate-300 text-sm leading-relaxed space-y-4">
+              <p className="text-slate-400 italic mb-4">(주)딥마인(이하 '회사')은 고객의 개인정보를 소중하게 생각하며, "개인정보 보호법" 등 관련 법령을 준수하고 있습니다.</p>
+              
+              <section>
+                <h4 className="font-bold text-white mb-2">1. 개인정보의 수집 및 이용 목적</h4>
+                <p>회사는 홈페이지 내 '프로젝트 문의하기' 기능을 통해 접수된 고객의 문의 사항에 대한 확인 및 답변, 상담 서비스 제공을 목적으로 개인정보를 처리합니다.</p>
+              </section>
+
+              <section>
+                <h4 className="font-bold text-white mb-2">2. 수집하는 개인정보 항목</h4>
+                <ul className="list-disc ml-5 space-y-1">
+                  <li>필수 항목: 회사명/담당자명, 이메일 주소, 문의 내용</li>
+                  <li>수집 방법: 홈페이지 문의 폼을 통한 이용자 직접 입력</li>
+                </ul>
+              </section>
+
+              <section>
+                <h4 className="font-bold text-white mb-2">3. 개인정보의 보유 및 이용 기간</h4>
+                <p>원칙적으로 개인정보 수집 및 이용 목적이 달성된 후에는 해당 정보를 지체 없이 파기합니다. 단, 관계 법령의 규정에 의하여 보존할 필요가 있는 경우 다음과 같이 일정 기간 보관합니다.</p>
+                <ul className="list-disc ml-5 mt-2 space-y-1">
+                  <li>소비자의 불만 또는 분쟁처리에 관한 기록: 3년</li>
+                  <li>홈페이지 방문 기록: 3개월</li>
+                </ul>
+              </section>
+
+              <section>
+                <h4 className="font-bold text-white mb-2">4. 정보주체의 권리 및 행사 방법</h4>
+                <p>고객은 언제든지 자신의 개인정보에 대한 열람, 수정, 삭제 및 처리 정지를 요구할 수 있습니다. 권리 행사는 회사(kwpark@deepmine.co.kr)를 통해 서면 또는 이메일로 연락하시면 지체 없이 조치하겠습니다.</p>
+              </section>
+
+              <section>
+                <h4 className="font-bold text-white mb-2">5. 개인정보 보호책임자</h4>
+                <p>성명: 박경원 (대표) | 연락처: 010-4231-4907 / kwpark@deepmine.co.kr</p>
+              </section>
+
+              <p className="text-xs text-slate-500 mt-8 pt-4 border-t border-slate-800">공고일자: 2024년 5월 11일 / 시행일자: 2024년 5월 11일</p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 이메일무단수집거부 모달 */}
+      {isEmailModalOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
+          <div 
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+            onClick={() => setIsEmailModalOpen(false)}
+          ></div>
+          <div className="relative bg-[#111827] border border-slate-800 w-full max-w-md rounded-2xl p-8 shadow-2xl">
+            <div className="flex justify-between items-center mb-6">
+              <h3 className="text-xl font-bold text-white">이메일무단수집거부</h3>
+              <button 
+                onClick={() => setIsEmailModalOpen(false)}
+                className="text-slate-400 hover:text-white p-2"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            <div className="text-slate-300 text-sm leading-relaxed space-y-4">
+              <p>본 웹사이트에 게시된 이메일 주소가 전자우편 수집 프로그램이나 그 밖의 기술적 장치를 이용하여 무단으로 수집되는 것을 거부합니다.</p>
+              <p>이를 위반 시 <span className="text-blue-400">정보통신망 이용촉진 및 정보보호 등에 관한 법률</span>에 의해 형사 처벌될 수 있음을 유념하시기 바랍니다.</p>
+              <p className="text-xs text-slate-500 mt-8 pt-4 border-t border-slate-800 text-center italic">게시일자: 2024년 5월 11일</p>
+            </div>
+          </div>
+        </div>
+      )}
 
       <main className="pt-20">
         {/* 1. Hero 섹션 */}
@@ -410,15 +497,71 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer className="bg-[#050810] border-t border-slate-800/50 py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
-          <div className="flex items-center">
-            <div className="w-6 h-6 rounded bg-slate-800 flex items-center justify-center mr-2 font-bold text-slate-400 text-xs">DM</div>
-            <span className="font-bold text-xl text-slate-300">DeepMine</span>
+      <footer className="bg-[#050810] border-t border-slate-800/50 pt-16 pb-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
+            {/* 1. 브랜드 섹션 */}
+            <div className="col-span-1 md:col-span-2">
+              <div className="flex items-center mb-4">
+                <div className="w-8 h-8 rounded bg-blue-600 flex items-center justify-center mr-3 font-bold text-white text-sm">DM</div>
+                <span className="font-bold text-2xl text-white">DeepMine</span>
+              </div>
+              <p className="text-slate-400 text-sm leading-relaxed max-w-sm">
+                제조/유통/금융 데이터 분석 및 인공 지능 개발 전문 기업입니다.
+                다양한 프로젝트 경험을 바탕으로 고객 맞춤형 AI 솔루션을 제공합니다.
+              </p>
+            </div>
+
+            {/* 2. 빠른 링크 섹션 */}
+            <div>
+              <h4 className="text-white font-bold mb-6">Navigation</h4>
+              <ul className="space-y-4 text-sm text-slate-400">
+                {['About', 'Solutions', 'History', 'Contact'].map((item) => (
+                  <li key={item}>
+                    <button 
+                      onClick={() => scrollToSection(item.toLowerCase())} 
+                      className="hover:text-blue-400 transition-colors"
+                    >
+                      {item}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* 3. 법적 고지 섹션 */}
+            <div>
+              <h4 className="text-white font-bold mb-6">Legal</h4>
+              <ul className="space-y-4 text-sm text-slate-400">
+                <li>
+                  <button 
+                    onClick={() => setIsPrivacyModalOpen(true)}
+                    className="hover:text-blue-400 transition-colors font-bold text-slate-300"
+                  >
+                    개인정보처리방침
+                  </button>
+                </li>
+                <li>
+                  <button 
+                    onClick={() => setIsEmailModalOpen(true)}
+                    className="hover:text-blue-400 transition-colors"
+                  >
+                    이메일무단수집거부
+                  </button>
+                </li>
+              </ul>
+            </div>
           </div>
-          <div className="text-slate-500 text-sm text-center md:text-left">
-            <p>대표자: {COMPANY_INFO.ceo} | {COMPANY_INFO.address}</p>
-            <p className="mt-2">© {new Date().getFullYear()} DeepMine Corp. All rights reserved.</p>
+
+          {/* 하단 상세 정보 라인 */}
+          <div className="border-t border-slate-800/50 pt-8 text-slate-500 text-xs leading-loose text-center md:text-left">
+            <div className="flex flex-col md:flex-row justify-between items-center">
+              <div>
+                <p>상호: {COMPANY_INFO.name} | 대표: {COMPANY_INFO.ceo} | 사업자등록번호: {COMPANY_INFO.businessNumber}</p>
+                <p>주소: {COMPANY_INFO.address} | 연락처: {COMPANY_INFO.phone} | 이메일: {COMPANY_INFO.email}</p>
+                <p className="mt-2 font-light">© {new Date().getFullYear()} DeepMine Corp. All rights reserved.</p>
+              </div>
+            </div>
           </div>
         </div>
       </footer>
