@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Menu, X, ChevronRight, BarChart3, Database, BrainCircuit, LineChart, Building2, Mail, Phone, Settings, Check } from 'lucide-react';
+import { Menu, X, ChevronRight, BarChart3, Database, BrainCircuit, LineChart, Building2, Mail, Phone, Settings, Check, ArrowRight, ArrowDown } from 'lucide-react';
 
 // ==========================================
-// 📝 데이터 영역 (DeepMine 소개 데이터)
+// 📝 데이터 영역 (DeepMine 및 수치 정보)
 // ==========================================
 
 const COMPANY_INFO = {
@@ -17,27 +17,70 @@ const COMPANY_INFO = {
   businessNumber: '116-81-78909'
 };
 
-const SOLUTIONS = [
+const STATS = [
+  { label: '초기 도입 직접 절감액', value: '약 38억 원', desc: '2019년 모델 구축 초기 가동 단계에서 재고 과다/부족 문제 최소화로 이룬 공급망 재고 비용 직접 절감액.' },
+  { label: '안정적 장기 예측 정확도', value: '84.7 %', desc: '과거 24개월 이력 데이터 축적 시 달성되는 향후 최대 7년(84개월) 장기 소요량 예측 수렴 정확도.' },
+  { label: '신규 제품(NPI) 초기 적중률', value: '70% 이상', desc: '과거 판매 데이터가 전무한 초기 론칭 상황(3개월)에서도 높은 사용률 예측으로 결품/과잉 발주 방어.' }
+];
+
+const PIPELINE = [
+  { step: 'Step 1', title: '외생 변수 결합 (Exogenous)', desc: '정적 변수(매장 정보 등), 과거 시계열, 미래 일정 변량(마케팅 행사) 등 다차원 컨텍스트 통합.' },
+  { step: 'Step 2', title: '데이터 증강 & 전처리', desc: 'Tsaug/SMOTE를 통한 이상 스파이크 노이즈 왜곡 보강 및 Robust Scaler 적용.' },
+  { step: 'Step 3', title: 'Core AI 예측 엔진', desc: '시간적 가변성에 대응하는 TFT/DeepAR 및 Zero-shot 파운데이션 모델(TimeGPT) 구동.' },
+  { step: 'Step 4', title: 'HPO & Loss 최적화', desc: 'Optuna 기반 베이지안 최적화 및 이상치 증폭 방지를 위한 MAE 손실함수 튜닝.' }
+];
+
+const MODELS = [
   {
     icon: <BarChart3 className="w-8 h-8 text-primary" />,
-    title: '제조/유통 수요 예측',
-    description: '대기업 및 중소기업의 상품 수요와 부품 자재의 수요를 예측합니다. 제조업체의 수율 예측 및 분석을 지원합니다.'
+    title: 'MLP Family (NHITS, NBEATS)',
+    desc: '단일 학습 프로세스 내에서 모든 미래 예측 시점을 한 번에 산출하는 Direct Forecasting을 수행합니다. 오차가 누적 전파되지 않고 병렬 연산이 매우 신속합니다.'
   },
   {
     icon: <LineChart className="w-8 h-8 text-accent" />,
-    title: '금융/경제 지표 예측',
-    description: '수입/수출 회사를 위한 원달러 환율 및 원자재 가격 예측, 금융회사의 상품 수요 및 가격 예측 모델을 제공합니다.'
+    title: 'RNN Family (LSTM, GRU, DeepAR)',
+    desc: '이전 예측값을 다시 다음 시점의 입력으로 취하는 Recursive Forecasting 구조입니다. 시계열의 순차적 흐름 파악과 가변적인 장기 이력 수용 능력이 뛰어납니다.'
   },
   {
     icon: <BrainCircuit className="w-8 h-8 text-primary opacity-80" />,
-    title: 'Advanced AI 아키텍처',
-    description: 'TimeGPT, Transformer, MLP, RNN, CNN 기반의 앙상블 모델을 활용하여 장단기 시계열 패턴을 완벽하게 학습합니다.'
+    title: 'Transformer Family (Autoformer, TFT)',
+    desc: '멀티 헤드 셀프 어텐션 구조를 내포하여 시간 흐름상 특정 구간에 가중치를 동적으로 집중시킵니다. 장기 의존성 분석과 외생 변수 융합에 탁월합니다.'
   },
   {
     icon: <Database className="w-8 h-8 text-accent opacity-80" />,
-    title: '빅데이터 기반 프레임워크',
-    description: '내부 데이터와 외부 크롤링 데이터를 결합하고, 1,000억 개 이상의 데이터 포인트가 학습된 파운데이션 모델을 활용합니다.'
+    title: 'CNN Family (BiTCN, Dilated Filters)',
+    desc: '시간 도메인을 따라 팽창 합성곱 필터를 병렬 처리하여 연산 효율을 높입니다. 국소적인 시계열 변동 패턴을 초고속으로 스캔하는 데 강합니다.'
   }
+];
+
+const ACCURACY_DATA = [
+  { label: 'M06 (6개월)', val: 73.6 },
+  { label: 'M12 (12개월)', val: 75.1 },
+  { label: 'M24 (24개월)', val: 84.7 },
+  { label: 'M36 (36개월)', val: 84.0 },
+  { label: 'M48 (48개월)', val: 83.6 },
+  { label: 'M60 (60개월)', val: 84.2 },
+  { label: 'M72 (72개월)', val: 84.3 },
+  { label: 'M78 (78개월)', val: 81.7 }
+];
+
+const PROJECTS = [
+  { client: '삼성전자', cat: '삼성', name: 'ASAP(마케팅 분석 시스템) 데이터 과학자 지원', desc: '서비스 자재 AI 수요예측 정확도 개선, Installed Base AI 수요예측 모델 구축 및 고도화, 마케팅 데이터 다차원 분석' },
+  { client: '삼성전자', cat: '삼성', name: '무선사업부 서비스 자재 수요예측', desc: '서비스 자재 인공지능 기반 수요예측 시스템 모델 구축 및 현장 GPU 실적용' },
+  { client: '삼성SDS', cat: '삼성', name: 'ASAP 데이터 과학자 지원', desc: 'ASAP S21 Sellout 예측을 위한 SLBF(Low Bound Forecasting) AI 예측 모델링 구현' },
+  { client: '한국정보화진흥원', cat: '공공', name: '범정부 데이터플랫폼 구축 1차 사업', desc: 'ASAP 데이터 거버넌스 및 표준화 제안, 데이터 연관도 분석 및 국가 데이터맵 아키텍처 개발' },
+  { client: '기아자동차', cat: '공공', name: '해외 데이터 체계 고도화 사업', desc: '글로벌 데이터 Taxonomy 정립 및 인공지능 기반 텍스트 마이닝 분석' },
+  { client: '현대자동차', cat: '공공', name: '낙찰가율 예측 및 분석', desc: '자동차 부품 조달을 위한 낙찰가율 시계열 예측 및 요인 분석' },
+  { client: '한국거래소', cat: '공공', name: '인공지능 기술의 시장감시 적용모델 개발', desc: '주식 시장 내 이상 징후 감시 및 지수 예측 인공지능 모델 개발' },
+  { client: '한국총판', cat: '공공', name: '인공지능 기반 영업기회 추천 솔루션 개발', desc: '뉴스 기사 및 트렌드 데이터 크롤링 기반 B2B 영업기회 자동 추천 솔루션 구축' },
+  { client: '삼성전자 캐나다/싱가포르', cat: '삼성', name: 'Marketing Mix Modeling', desc: '북미 및 아시아 법인 대상 마케팅 효과 및 ROI 최적화 분석' },
+  { client: '삼성전자 인도법인', cat: '삼성', name: '서남아법인 Sellout Forecasting & MMM', desc: 'HHP Sellout 수요예측 모델 설계 및 마케팅 믹스 최적화 모델 개발' },
+  { client: '국토교통부', cat: '공공', name: '공간 빅데이터 구축 및 AI 모델링', desc: '토지 비축을 위한 공간 통계 및 인공지능 예측 모델링 구현' },
+  { client: '삼성디스플레이', cat: '삼성', name: 'R 통계학 전문 교육', desc: '시각화, 데이터 프로그래밍, 시계열 통계 모델링 역량 강화 교육' },
+  { client: '롯데면세점', cat: '공공', name: '마케팅 시스템 구축', desc: '면세점 상품군 분류 및 실적/매출 기여도 분석' },
+  { client: '알리안츠생명', cat: '공공', name: '보험사기 및 언더라이팅 분석', desc: '이상징후 탐지 알고리즘 기반 통계 분석 모델 설계' },
+  { client: '동부화재', cat: '공공', name: '고객 세분화 분석', desc: '이탈 예측 알고리즘 기반 고객 세분화 및 방지책 수립' },
+  { client: '삼성증권', cat: '삼성', name: '퇴직연금 시스템 개발', desc: '퇴직연금 분석 모듈 설계 및 데이터 모델 개발' }
 ];
 
 const HISTORY = [
@@ -53,29 +96,30 @@ const CLIENTS = [
   '삼성전자', '삼성SDS', '현대자동차', '기아자동차', '한국거래소', '국토교통부', '한국정보화진흥원', '삼성증권', '롯데면세점', '동부화재'
 ];
 
-// ==========================================
-// 💻 UI 리팩토링 (DDDS 명세서 및 KRDS 적용)
-// ==========================================
-
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isPrivacyModalOpen, setIsPrivacyModalOpen] = useState(false);
   const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
-  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false); // 글자·화면 표시 설정 모달
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
 
-  // 화면 설정 상태 관리 (기본값: 다크모드, 보통 글자 크기)
+  // 화면 스타일 상태 (기본 다크테마, 보통 폰트 스케일)
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [fontSizeScale, setFontSizeScale] = useState('medium');
+
+  // 예측 솔루션 탭 및 프로젝트 필터 상태
+  const [activeTab, setActiveTab] = useState('foundation');
+  const [projectFilter, setProjectFilter] = useState('all');
+
+  // SVG 차트 호버 상태
+  const [hoveredPoint, setHoveredPoint] = useState(null);
 
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
   const [status, setStatus] = useState('idle');
 
-  // 모달 접근성 포커스 통제를 위한 Refs
   const privacyRef = useRef(null);
   const emailRef = useRef(null);
   const settingsRef = useRef(null);
 
-  // 다크모드 및 시스템 설정 자동 대응
   useEffect(() => {
     const root = document.documentElement;
     if (isDarkMode) {
@@ -85,7 +129,6 @@ export default function App() {
     }
   }, [isDarkMode]);
 
-  // Esc 누를 시 열려있는 모든 모달 닫기
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
@@ -98,7 +141,6 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
-  // 모달 포커스 트랩 (Focus Lock) 구현
   const handleFocusTrap = (e, modalRef, closeFn) => {
     if (!modalRef.current) return;
     const focusableEls = modalRef.current.querySelectorAll(
@@ -161,6 +203,48 @@ export default function App() {
       setStatus('idle');
     }
   };
+
+  // ==========================================
+  // 📈 SVG 선 차트 좌표 계산 함수
+  // ==========================================
+  const svgWidth = 800;
+  const svgHeight = 280;
+  const paddingX = 60;
+  const paddingY = 40;
+
+  // 값의 매핑 (Y축: 70 ~ 90, X축: 8개 포인트)
+  const getCoordinates = () => {
+    return ACCURACY_DATA.map((d, i) => {
+      const x = paddingX + (i / (ACCURACY_DATA.length - 1)) * (svgWidth - paddingX * 2);
+      const y = svgHeight - paddingY - ((d.val - 70) / (90 - 70)) * (svgHeight - paddingY * 2);
+      return { x, y, label: d.label, val: d.val };
+    });
+  };
+
+  const points = getCoordinates();
+  
+  // SVG 라인 패스 생성 (Smooth Curve - Catmull-Rom 기법 약식 적용)
+  const linePath = points.reduce((path, p, i) => {
+    if (i === 0) return `M ${p.x} ${p.y}`;
+    const prev = points[i - 1];
+    // 부드러운 곡선을 위해 조절점 계산
+    const cpX1 = prev.x + (p.x - prev.x) / 3;
+    const cpY1 = prev.y;
+    const cpX2 = prev.x + 2 * (p.x - prev.x) / 3;
+    const cpY2 = p.y;
+    return `${path} C ${cpX1} ${cpY1}, ${cpX2} ${cpY2}, ${p.x} ${p.y}`;
+  }, '');
+
+  // 차트 면적 채우기 패스 생성
+  const areaPath = points.length > 0 
+    ? `${linePath} L ${points[points.length - 1].x} ${svgHeight - paddingY} L ${points[0].x} ${svgHeight - paddingY} Z`
+    : '';
+
+  // 필터링된 프로젝트 데이터
+  const filteredProjects = PROJECTS.filter(p => {
+    if (projectFilter === 'all') return true;
+    return p.cat === projectFilter;
+  });
 
   return (
     <div className={`min-h-screen bg-background text-ink font-sans transition-colors duration-300 scale-${fontSizeScale}`}>
@@ -451,7 +535,6 @@ export default function App() {
         
         {/* 1. Hero 섹션 (배경: Background) */}
         <section className="relative px-4 sm:px-6 lg:px-8 py-[96px] lg:py-48 flex flex-col items-center justify-center text-center overflow-hidden bg-background transition-colors duration-300">
-          {/* 어두운 배경 모드일 때만 그라데이션 광무 효과 제공 */}
           {isDarkMode && (
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-primary/10 blur-[120px] rounded-full pointer-events-none"></div>
           )}
@@ -461,7 +544,6 @@ export default function App() {
               AI FUTURE DEMAND FORECASTING
             </span>
             
-            {/* Cormorant Garamond를 display에 적용 (Weight 400~500, 볼드 배제) */}
             <h1 className="text-5xl md:text-7xl font-serif font-normal tracking-tight text-ink mb-8 leading-[1.1] break-keep">
               데이터 기반 미래 예측 솔루션 <br />
               <span className="text-primary font-medium">
@@ -474,10 +556,10 @@ export default function App() {
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <button
-                onClick={() => scrollToSection('solutions')}
+                onClick={() => scrollToSection('about')}
                 className="w-full sm:w-auto px-8 py-4 rounded-md bg-primary text-white font-semibold hover:bg-primary/95 transition-all flex items-center justify-center shadow-md shadow-primary/10"
               >
-                솔루션 보기 <ChevronRight className="ml-2 w-5 h-5" />
+                도입 성과 보기 <ChevronRight className="ml-2 w-5 h-5" />
               </button>
               <button
                 onClick={() => scrollToSection('contact')}
@@ -489,146 +571,369 @@ export default function App() {
           </div>
         </section>
 
-        {/* 2. About 섹션 (배경: Cream Canvas 교차) */}
+        {/* 2. About & 성과 섹션 (배경: Cream Canvas 교차) */}
         <section id="about" className="py-[96px] bg-cream transition-colors duration-300">
           <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              <div>
-                <h2 className="text-3xl md:text-4xl font-serif font-normal tracking-tight text-ink mb-6">About Us</h2>
-                <div className="w-20 h-0.5 bg-primary mb-8 rounded"></div>
-                <p className="text-lg text-ink/80 leading-relaxed mb-8">
-                  {COMPANY_INFO.description}
-                </p>
-              </div>
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-accent/15 rounded-2xl transform rotate-3 opacity-20 blur-lg"></div>
-                
-                {/* DM-Widget-Card 패턴 (그림자 억제 및 보더 중심) */}
-                <div className="relative bg-surface border border-border/80 p-8 rounded-lg aspect-square flex flex-col justify-center">
-                  <div className="space-y-4">
-                    <div className="h-8 w-1/3 bg-border/40 rounded animate-pulse"></div>
-                    <div className="h-4 w-full bg-border/40 rounded"></div>
-                    <div className="h-4 w-5/6 bg-border/40 rounded"></div>
-                    
-                    {/* 데이터 시각화 그래픽 (Intelligent 로딩 모사) */}
-                    <div className="h-32 w-full bg-gradient-to-t from-primary/10 to-transparent border-b border-primary/40 mt-8 rounded flex items-end">
-                      <div className="w-full flex justify-between items-end px-2 space-x-2 h-full opacity-60">
-                        {[40, 70, 45, 90, 65, 100, 80].map((h, i) => (
-                          <div 
-                            key={i} 
-                            className="w-full bg-primary rounded-t transition-all duration-1000 ease-out" 
-                            style={{ height: `${h}%` }}
-                          ></div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* 3. Solutions 섹션 (배경: Background) */}
-        <section id="solutions" className="py-[96px] bg-background transition-colors duration-300">
-          <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-serif font-normal tracking-tight text-ink mb-4">AI 미래 수요 예측 솔루션</h2>
+            <div className="text-center max-w-3xl mx-auto mb-16">
+              <span className="text-primary font-bold tracking-wider uppercase text-xs">Customer Case Study</span>
+              <h2 className="text-3xl md:text-4xl font-serif font-normal tracking-tight text-ink mt-2 mb-4">삼성전자 모델 적용 성과</h2>
               <div className="w-16 h-0.5 bg-primary mx-auto mb-6"></div>
-              <p className="text-lg text-ink/70 max-w-2xl mx-auto">
-                데이터 수집부터 모델링, 시각화까지 고객사의 도메인에 최적화된 예측 모델을 제공합니다.
+              <p className="text-base text-ink/80 leading-relaxed max-w-2xl mx-auto">
+                (주)딥마인은 세계 최고 수준의 SCM 환경에서 데이터 기반 AI 수요 예측 모델을 안정적으로 운영하여, 부품 자재 조달 효율을 극대화하고 있습니다.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {SOLUTIONS.map((solution, idx) => (
-                // DM-Widget-Card 패턴 (12px rounded-lg, 그림자 억제)
-                <div key={idx} className="bg-surface border border-border p-8 rounded-lg hover:border-primary/50 transition-colors duration-300 group">
-                  <div className="bg-background w-16 h-16 rounded-lg flex items-center justify-center mb-6 group-hover:scale-105 transition-transform duration-300">
-                    {solution.icon}
-                  </div>
-                  <h3 className="text-xl font-bold text-ink mb-3">{solution.title}</h3>
-                  <p className="text-ink/80 leading-relaxed">
-                    {solution.description}
-                  </p>
+            {/* 정량 지표 3대 빅 넘버 카드 */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+              {STATS.map((stat, i) => (
+                <div key={i} className="bg-surface border border-border/80 p-8 rounded-lg text-center shadow-sm">
+                  <div className="text-slate-400 text-xs font-semibold uppercase tracking-wider mb-2">{stat.label}</div>
+                  <div className="text-4xl font-extrabold text-primary my-3 tracking-tight">{stat.value}</div>
+                  <p className="text-xs text-ink/65 leading-relaxed mt-4 pt-4 border-t border-border/40">{stat.desc}</p>
                 </div>
               ))}
+            </div>
+
+            {/* AI 학습 파이프라인 가로 다이어그램 (버전 4 결합) */}
+            <div className="bg-surface border border-border/80 p-8 lg:p-12 rounded-lg mt-12 shadow-sm">
+              <h3 className="text-xl font-bold text-ink mb-2 text-center">딥마인 AI 학습 & 전처리 파이프라인</h3>
+              <p className="text-xs text-ink/65 text-center mb-10">데이터 수집부터 HPO 탐색까지의 유기적인 시계열 머신러닝 프로세스</p>
+              
+              <div className="flex flex-col lg:flex-row items-center justify-between gap-6 lg:gap-4">
+                {PIPELINE.map((pipe, i) => (
+                  <React.Fragment key={i}>
+                    <div className="flex-1 w-full bg-background border border-border/60 p-5 rounded-lg text-center lg:text-left transition-all hover:border-primary/40 duration-300">
+                      <span className="inline-block px-2.5 py-0.5 bg-primary/10 text-primary text-[10px] font-bold rounded-full mb-2">{pipe.step}</span>
+                      <h4 className="font-bold text-sm text-ink mb-1.5">{pipe.title}</h4>
+                      <p className="text-xs text-ink/70 leading-relaxed">{pipe.desc}</p>
+                    </div>
+                    {i < PIPELINE.length - 1 && (
+                      <div className="flex items-center justify-center text-slate-400 shrink-0" aria-hidden="true">
+                        <ArrowRight className="hidden lg:block w-5 h-5" />
+                        <ArrowDown className="lg:hidden w-5 h-5 my-1" />
+                      </div>
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
             </div>
           </div>
         </section>
 
-        {/* 4. History & Clients 섹션 (배경: Cream Canvas 교차) */}
-        <section id="history" className="py-[96px] bg-cream transition-colors duration-300">
+        {/* 3. Solutions & AI 아키텍처 섹션 (배경: Background) */}
+        <section id="solutions" className="py-[96px] bg-background transition-colors duration-300">
           <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
+            <div className="text-center mb-16">
+              <span className="text-primary font-bold tracking-wider uppercase text-xs">Advanced AI Architecture</span>
+              <h2 class="text-3xl md:text-4xl font-serif font-normal tracking-tight text-ink mt-2 mb-4">파운데이션 모델 및 예측 엔진군</h2>
+              <div className="w-16 h-0.5 bg-primary mx-auto mb-6"></div>
+              <p className="text-lg text-ink/70 max-w-2xl mx-auto">
+                딥마인은 초대형 사전 학습 시계열 Zero-shot 모델과 고성능 딥러닝 알고리즘을 융합하여 정밀한 예측력을 제공합니다.
+              </p>
+            </div>
 
-              {/* 연혁 */}
+            {/* 2대 기술 탭 UI (버전 5 차용) */}
+            <div className="flex justify-center border-b border-border/80 mb-10 gap-2">
+              <button 
+                onClick={() => setActiveTab('foundation')}
+                className={`px-6 py-3 text-sm font-semibold border-b-2 transition-all ${
+                  activeTab === 'foundation' 
+                    ? 'border-primary text-primary font-bold' 
+                    : 'border-transparent text-ink/60 hover:text-ink'
+                }`}
+              >
+                파운데이션 모델 스택
+              </button>
+              <button 
+                onClick={() => setActiveTab('traditional')}
+                className={`px-6 py-3 text-sm font-semibold border-b-2 transition-all ${
+                  activeTab === 'traditional' 
+                    ? 'border-primary text-primary font-bold' 
+                    : 'border-transparent text-ink/60 hover:text-ink'
+                }`}
+              >
+                기반 딥러닝 아키텍처
+              </button>
+            </div>
+
+            {/* 탭 콘텐츠 렌더링 */}
+            <div className="min-h-[220px]">
+              {activeTab === 'foundation' ? (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+                  <div className="bg-surface border border-border border-t-4 border-t-primary p-6 rounded-lg shadow-sm">
+                    <h4 className="font-bold text-lg text-ink mb-2">TimeGPT (Nixtla)</h4>
+                    <p className="text-xs text-ink/70 leading-relaxed mb-4">금융, 날씨, 에너지 등 1,000억 개 이상의 시점 이력으로 사전 학습된 인코더-디코더 트랜스포머. 로컬 위치 인코딩 및 잔차 연결 결합.</p>
+                    <span className="inline-block bg-primary/10 text-primary text-[10px] px-2 py-0.5 rounded font-semibold">Deterministic Point 예측</span>
+                  </div>
+                  <div className="bg-surface border border-border border-t-4 border-t-accent p-6 rounded-lg shadow-sm">
+                    <h4 className="font-bold text-lg text-ink mb-2">Moirai (Salesforce)</h4>
+                    <p className="text-xs text-ink/70 leading-relaxed mb-4">혼합 확률 분포를 출력하여 단일 미래 값 대신 전체 분포의 두께와 신뢰 구간 예측을 수행하는 확률적 아키텍처.</p>
+                    <span className="inline-block bg-accent/15 text-accent text-[10px] px-2 py-0.5 rounded font-semibold">Probabilistic PDF 예측</span>
+                  </div>
+                  <div className="bg-surface border border-border border-t-4 border-t-slate-500 p-6 rounded-lg shadow-sm">
+                    <h4 className="font-bold text-lg text-ink mb-2">Chronos (Amazon)</h4>
+                    <p className="text-xs text-ink/70 leading-relaxed mb-4">연속 시계열 변량을 고정 이산 값으로 토큰화하여 대형 언어 모델(LLM)을 시계열 예측용으로 변환.</p>
+                    <span className="inline-block bg-border text-ink/70 text-[10px] px-2 py-0.5 rounded font-semibold">LLM 기반 시계열 예측</span>
+                  </div>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {MODELS.map((model, i) => (
+                    <div key={i} className="bg-surface border border-border p-6 rounded-lg flex flex-col hover:border-primary/50 transition-colors duration-300">
+                      <div className="bg-background w-14 h-14 rounded-lg flex items-center justify-center mb-5 shrink-0">
+                        {model.icon}
+                      </div>
+                      <h4 className="font-bold text-base text-ink mb-2">{model.title}</h4>
+                      <p className="text-xs text-ink/75 leading-relaxed">{model.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </section>
+
+        {/* 4. Performance Section (예측 성능 시각화 - 신규) */}
+        <section id="performance" className="py-[96px] bg-cream transition-colors duration-300">
+          <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center max-w-3xl mx-auto mb-16">
+              <span className="text-primary font-bold tracking-wider uppercase text-xs">AI Performance Chart</span>
+              <h2 className="text-3xl md:text-4xl font-serif font-normal tracking-tight text-ink mt-2 mb-4">데이터 축적에 따른 모델 성능 추이</h2>
+              <div className="w-16 h-0.5 bg-primary mx-auto mb-6"></div>
+              <p className="text-base text-ink/75 leading-relaxed max-w-2xl mx-auto">
+                가용 데이터 축적 기간이 길어질수록, 딥마인의 예측 모델이 장기 추세 변동을 완벽히 인지하여 향후 최대 84개월(7년) 후의 장기 예측 정확도가 비약적으로 향상됩니다.
+              </p>
+            </div>
+
+            {/* SVG 기반 커스텀 꺾은선 차트 (의존성 없이 HSL 테마와 100% 호환) */}
+            <div className="bg-surface p-6 sm:p-10 rounded-lg border border-border shadow-sm max-w-4xl mx-auto relative overflow-hidden">
+              <h3 className="text-base font-bold text-ink mb-2">종합 예측 정확도 (%) 추세 분석</h3>
+              <p className="text-xs text-ink/60 mb-6">M06(6개월) ~ M78(78개월) 가용 데이터 축적에 따른 정확도 변동</p>
+              
+              <div className="relative w-full overflow-x-auto">
+                <svg viewBox={`0 0 ${svgWidth} ${svgHeight}`} className="w-full min-w-[640px] h-auto overflow-visible select-none">
+                  {/* Y축 격자선 및 눈금 텍스트 */}
+                  {[70, 75, 80, 85, 90].map((yVal, i) => {
+                    const y = svgHeight - paddingY - ((yVal - 70) / (90 - 70)) * (svgHeight - paddingY * 2);
+                    return (
+                      <g key={i} className="opacity-80">
+                        <line x1={paddingX} y1={y} x2={svgWidth - paddingX} y2={y} stroke="hsl(var(--border))" strokeDasharray="3,3" strokeWidth="1" />
+                        <text x={paddingX - 10} y={y + 4} textAnchor="end" className="text-[11px] fill-ink/60 font-mono">{yVal}%</text>
+                      </g>
+                    );
+                  })}
+
+                  {/* 그라데이션 정의 */}
+                  <defs>
+                    <linearGradient id="chartAreaGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity="0.15" />
+                      <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity="0.0" />
+                    </linearGradient>
+                  </defs>
+
+                  {/* 면적 패스 */}
+                  <path d={areaPath} fill="url(#chartAreaGradient)" />
+
+                  {/* 꺾은선 패스 */}
+                  <path d={linePath} fill="none" stroke="hsl(var(--primary))" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
+
+                  {/* 데이터 포인트 원 표시 및 인터랙션 */}
+                  {points.map((p, i) => (
+                    <g 
+                      key={i} 
+                      onMouseEnter={() => setHoveredPoint(i)}
+                      onMouseLeave={() => setHoveredPoint(null)}
+                      className="cursor-pointer"
+                    >
+                      {/* 외부 포커스 원 (호버 시 활성화) */}
+                      <circle 
+                        cx={p.x} 
+                        cy={p.y} 
+                        r={hoveredPoint === i ? 12 : 0} 
+                        fill="hsl(var(--primary))" 
+                        className="transition-all duration-300 opacity-20"
+                      />
+                      {/* 메인 테두리 원 */}
+                      <circle 
+                        cx={p.x} 
+                        cy={p.y} 
+                        r={hoveredPoint === i ? 7 : 5} 
+                        fill="hsl(var(--surface))" 
+                        stroke="hsl(var(--primary))" 
+                        strokeWidth={hoveredPoint === i ? 3 : 2.5} 
+                        className="transition-all duration-200"
+                      />
+                      {/* X축 텍스트 라벨 */}
+                      <text 
+                        x={p.x} 
+                        y={svgHeight - 12} 
+                        textAnchor="middle" 
+                        className={`text-[10px] font-sans transition-all duration-200 ${
+                          hoveredPoint === i ? 'fill-primary font-bold' : 'fill-ink/60'
+                        }`}
+                      >
+                        {p.label.split(' ')[0]}
+                      </text>
+                    </g>
+                  ))}
+
+                  {/* X축 기본 라인 */}
+                  <line x1={paddingX} y1={svgHeight - paddingY} x2={svgWidth - paddingX} y2={svgHeight - paddingY} stroke="hsl(var(--border))" strokeWidth="1" />
+                </svg>
+              </div>
+
+              {/* 실시간 SVG 호버 툴팁 */}
+              {hoveredPoint !== null && (
+                <div 
+                  className="absolute bg-surface border border-border/80 px-4 py-2.5 rounded-md shadow-lg pointer-events-none transition-all duration-150 ease-out z-20 text-left"
+                  style={{
+                    left: `${((points[hoveredPoint].x - paddingX) / (svgWidth - paddingX * 2)) * 80 + 10}%`,
+                    top: '20%'
+                  }}
+                >
+                  <p className="text-[10px] text-ink/60">{points[hoveredPoint].label}</p>
+                  <p className="text-sm font-extrabold text-primary mt-0.5">정확도: {points[hoveredPoint].val}%</p>
+                </div>
+              )}
+
+              {/* 성능 분석 디스크립션 카드 */}
+              <div className="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 p-4 border-t border-border/60">
+                <div>
+                  <span className="text-primary font-bold text-xs block mb-1">💡 24개월 시점의 안정화 임계점</span>
+                  <p className="text-xs text-ink/75 leading-relaxed">
+                    이력 데이터가 최소 24개월 이상 안정적으로 누적되는 시점부터 **84%대의 고도의 안정적인 정확도 구간**으로 수렴합니다.
+                  </p>
+                </div>
+                <div>
+                  <span className="text-primary font-bold text-xs block mb-1">💡 최대 7년 후의 장기 예측 정밀도</span>
+                  <p className="text-xs text-ink/75 leading-relaxed">
+                    최장기 단계인 78개월 활용 예측에서도 **81.7%**의 높은 정밀도를 유지하여 장기 부품 조달 계획 수립에 즉각 연계 가능합니다.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* 5. History & Clients 섹션 (배경: Background) */}
+        <section id="history" className="py-[96px] bg-background transition-colors duration-300">
+          <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-20">
+
+              {/* 연혁 타임라인 */}
               <div>
                 <h2 className="text-3xl font-serif font-normal tracking-tight text-ink mb-10">History</h2>
                 <div className="space-y-8 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-border before:to-transparent">
                   {HISTORY.map((item, idx) => (
                     <div key={idx} className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
-                      <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-cream bg-border group-hover:bg-primary text-ink/50 group-hover:text-white shadow-sm shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 transition-colors duration-300 z-10">
+                      <div className="flex items-center justify-center w-10 h-10 rounded-full border-4 border-background bg-border group-hover:bg-primary text-ink/50 group-hover:text-white shadow-sm shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2 transition-colors duration-300 z-10">
                         <div className="w-2 h-2 bg-white rounded-full"></div>
                       </div>
                       
-                      {/* DM-Widget-Card 적용 */}
                       <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] bg-surface border border-border p-5 rounded-lg shadow-sm">
                         <div className="flex items-center justify-between space-x-2 mb-1">
-                          <div className="font-bold text-primary">{item.year}</div>
+                          <div className="font-bold text-primary text-sm">{item.year}</div>
                         </div>
-                        <div className="text-ink/80">{item.title}</div>
+                        <div className="text-xs text-ink/80 leading-relaxed">{item.title}</div>
                       </div>
                     </div>
                   ))}
                 </div>
               </div>
 
-              {/* 주요 고객사 */}
+              {/* 주요 고객사 배지 */}
               <div>
                 <h2 className="text-3xl font-serif font-normal tracking-tight text-ink mb-10">Trusted By</h2>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
                   {CLIENTS.map((client, idx) => (
                     <div key={idx} className="bg-surface border border-border rounded-lg p-4 flex items-center justify-center text-center h-24 hover:bg-border/20 transition-colors duration-300">
-                      <span className="font-medium text-ink/80 group-hover:text-ink">
+                      <span className="font-medium text-xs text-ink/80 group-hover:text-ink">
                         {client}
                       </span>
                     </div>
                   ))}
                 </div>
 
-                {/* DM-Widget-Card 성과 피드백 패널 */}
                 <div className="mt-12 bg-primary/5 border border-primary/20 rounded-lg p-8">
-                  <h3 className="text-xl font-bold text-ink mb-4">주요 도입 성과</h3>
-                  <ul className="space-y-4 text-ink/85">
+                  <h3 className="text-base font-bold text-ink mb-4">대표 구축 이력</h3>
+                  <ul className="space-y-4 text-xs text-ink/85 leading-relaxed">
                     <li className="flex items-start">
                       <div className="mr-3 mt-1.5 text-primary shrink-0 font-bold">•</div>
-                      <span className="break-keep">삼성전자 무선사업부 서비스 자재 수요 예측 모델 도입 초기 <b>수 십억원 절감</b></span>
+                      <span className="break-keep">삼성전자 무선사업부 서비스 자재 수요 예측 시스템 PoC부터 GPU 실사용 운영화 완료.</span>
                     </li>
                     <li className="flex items-start">
                       <div className="mr-3 mt-1.5 text-primary shrink-0 font-bold">•</div>
-                      <span className="break-keep">지속적인 개선 및 고도화를 통해 <b>매년 수 억원의 비용 절감</b> 효과 발생</span>
+                      <span className="break-keep">삼성전자 마케팅 분석 시스템(ASAP) 데이터 분석 및 데이터 과학 역량 전담 지원.</span>
                     </li>
                     <li className="flex items-start">
                       <div className="mr-3 mt-1.5 text-primary shrink-0 font-bold">•</div>
-                      <span className="break-keep">LTB 장단기 수요 예측 정확도 <b>최대 84.7% 달성</b></span>
+                      <span className="break-keep">한국거래소, 국토교통부 등 공공/금융 인공지능 공간 통계 & 모니터링 시스템 구축.</span>
                     </li>
                   </ul>
                 </div>
               </div>
+            </div>
 
+            {/* 필터 가능한 주요 사업 실적 테이블 (버전 5 차용) */}
+            <div className="bg-surface border border-border rounded-lg p-8 shadow-sm">
+              <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-6 border-b border-border pb-3">
+                <h3 className="text-lg font-bold text-ink">상세 사업 및 프로젝트 수행 실적</h3>
+                <span className="text-xs text-ink/50">2011년 6월 ~ 현재</span>
+              </div>
+              
+              <div className="mb-6 flex flex-wrap gap-2">
+                {[
+                  { id: 'all', label: '전체 내역' },
+                  { id: '삼성', label: '삼성 그룹사' },
+                  { id: '공공', label: '공공 / 금융 / 기타' }
+                ].map((btn) => (
+                  <button
+                    key={btn.id}
+                    onClick={() => setProjectFilter(btn.id)}
+                    className={`text-xs font-semibold px-4 py-1.5 rounded-full transition-all duration-300 ${
+                      projectFilter === btn.id
+                        ? 'bg-primary/15 text-primary'
+                        : 'bg-background text-ink/70 hover:bg-border/30'
+                    }`}
+                  >
+                    {btn.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* 데이터 테이블 */}
+              <div className="overflow-x-auto max-h-[350px] overflow-y-auto pr-2 border rounded-md border-border/40">
+                <table className="min-w-full divide-y divide-border/60">
+                  <thead className="bg-background sticky top-0 z-10">
+                    <tr>
+                      <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-ink/75 uppercase w-1/4">고객사</th>
+                      <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-ink/75 uppercase w-1/3">프로젝트명</th>
+                      <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-ink/75 uppercase hidden md:table-cell">수행 요약</th>
+                    </tr>
+                  </thead>
+                  <tbody className="bg-surface divide-y divide-border/40">
+                    {filteredProjects.map((p, i) => (
+                      <tr key={i} className="hover:bg-border/10 transition-colors duration-150">
+                        <td className="px-4 py-4 text-xs font-bold text-primary align-top whitespace-nowrap">{p.client}</td>
+                        <td className="px-4 py-4 text-xs font-semibold text-ink align-top">{p.name}</td>
+                        <td className="px-4 py-4 text-xs text-ink/75 hidden md:table-cell align-top leading-relaxed">{p.desc}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* 5. Contact 섹션 (배경: Background) */}
+        {/* 6. Contact 섹션 (배경: Background) */}
         <section id="contact" className="py-[96px] bg-background transition-colors duration-300">
           <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="bg-surface border border-border rounded-2xl p-8 lg:p-16 flex flex-col lg:flex-row gap-12">
 
               <div className="lg:w-1/2">
                 <h2 className="text-3xl md:text-4xl font-serif font-normal tracking-tight text-ink mb-6">프로젝트 문의하기</h2>
-                <p className="text-ink/70 mb-10 leading-relaxed">
+                <p className="text-ink/70 mb-10 leading-relaxed text-sm">
                   기업의 데이터를 활용한 맞춤형 AI 수요예측 솔루션 도입에 대해 상담해 드립니다. 아래 연락처로 편하게 문의주세요.
                 </p>
 
@@ -636,22 +941,22 @@ export default function App() {
                   <div className="flex items-start">
                     <Building2 className="w-6 h-6 text-primary mt-1 mr-4 shrink-0" />
                     <div>
-                      <h4 className="text-ink font-semibold mb-1">본사 위치</h4>
-                      <p className="text-ink/70">{COMPANY_INFO.address}</p>
+                      <h4 className="text-ink font-semibold mb-1 text-sm">본사 위치</h4>
+                      <p className="text-ink/70 text-xs">{COMPANY_INFO.address}</p>
                     </div>
                   </div>
                   <div className="flex items-start">
                     <Mail className="w-6 h-6 text-primary mt-1 mr-4 shrink-0" />
                     <div>
-                      <h4 className="text-ink font-semibold mb-1">이메일</h4>
-                      <p className="text-ink/70">{COMPANY_INFO.email}</p>
+                      <h4 className="text-ink font-semibold mb-1 text-sm">이메일</h4>
+                      <p className="text-ink/70 text-xs">{COMPANY_INFO.email}</p>
                     </div>
                   </div>
                   <div className="flex items-start">
                     <Phone className="w-6 h-6 text-primary mt-1 mr-4 shrink-0" />
                     <div>
-                      <h4 className="text-ink font-semibold mb-1">연락처</h4>
-                      <p className="text-ink/70">{COMPANY_INFO.phone}</p>
+                      <h4 className="text-ink font-semibold mb-1 text-sm">연락처</h4>
+                      <p className="text-ink/70 text-xs">{COMPANY_INFO.phone}</p>
                     </div>
                   </div>
                 </div>
@@ -661,7 +966,7 @@ export default function App() {
               <div className="lg:w-1/2">
                 <form className="space-y-5" onSubmit={handleSubmit}>
                   <div>
-                    <label id="label-name" htmlFor="input-name" className="block text-sm font-semibold text-ink/75 mb-1.5">
+                    <label id="label-name" htmlFor="input-name" className="block text-xs font-semibold text-ink/75 mb-1.5">
                       회사명 / 담당자명 <span className="text-red-500" aria-hidden="true">*</span>
                     </label>
                     <input
@@ -671,14 +976,14 @@ export default function App() {
                       value={formData.name}
                       onChange={handleChange}
                       aria-labelledby="label-name"
-                      className="w-full bg-background border border-border rounded-md px-4 py-3 text-ink focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                      className="w-full bg-background border border-border rounded-md px-4 py-3 text-sm text-ink focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
                       placeholder="예: (주)딥마인 / 홍길동"
                       required
                     />
                   </div>
                   
                   <div>
-                    <label id="label-email" htmlFor="input-email" className="block text-sm font-semibold text-ink/75 mb-1.5">
+                    <label id="label-email" htmlFor="input-email" className="block text-xs font-semibold text-ink/75 mb-1.5">
                       이메일 <span className="text-red-500" aria-hidden="true">*</span>
                     </label>
                     <input
@@ -688,14 +993,14 @@ export default function App() {
                       value={formData.email}
                       onChange={handleChange}
                       aria-labelledby="label-email"
-                      className="w-full bg-background border border-border rounded-md px-4 py-3 text-ink focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                      className="w-full bg-background border border-border rounded-md px-4 py-3 text-sm text-ink focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
                       placeholder="company@email.com"
                       required
                     />
                   </div>
                   
                   <div>
-                    <label id="label-message" htmlFor="input-message" className="block text-sm font-semibold text-ink/75 mb-1.5">
+                    <label id="label-message" htmlFor="input-message" className="block text-xs font-semibold text-ink/75 mb-1.5">
                       문의 내용 <span className="text-red-500" aria-hidden="true">*</span>
                     </label>
                     <textarea
@@ -705,7 +1010,7 @@ export default function App() {
                       onChange={handleChange}
                       aria-labelledby="label-message"
                       rows="4"
-                      className="w-full bg-background border border-border rounded-md px-4 py-3 text-ink focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                      className="w-full bg-background border border-border rounded-md px-4 py-3 text-sm text-ink focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
                       placeholder="도입을 희망하시는 데이터 분야나 솔루션에 대해 간략히 적어주세요."
                       required
                     ></textarea>
@@ -714,7 +1019,7 @@ export default function App() {
                   <button
                     type="submit"
                     disabled={status === 'loading'}
-                    className={`w-full ${status === 'loading' ? 'bg-primary/80 cursor-wait' : 'bg-primary hover:bg-primary/95'} text-white font-medium py-3 px-4 rounded-md transition-all flex items-center justify-center shadow-md shadow-primary/10`}
+                    className={`w-full ${status === 'loading' ? 'bg-primary/80 cursor-wait' : 'bg-primary hover:bg-primary/95'} text-white text-sm font-semibold py-3 px-4 rounded-md transition-all flex items-center justify-center shadow-md shadow-primary/10`}
                   >
                     {status === 'loading' ? (
                       <>

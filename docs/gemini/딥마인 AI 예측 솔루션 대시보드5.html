@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>딥마인(DeepMine) - AI 미래 수요 예측 솔루션</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Chosen Palette: [Slate Backgrounds (slate-50), Deep Indigo Primary (indigo-900), Vibrant Blue Accents (blue-600), Clean White Cards (white)] -->
+    
+    <!-- Application Structure Plan: [본 SPA는 딥마인의 기업 역량과 AI 기술력을 효과적으로 전달하기 위해 '대시보드형 스토리텔링' 구조로 설계되었습니다. 상단(Hero)에서 기업의 핵심 비전과 제공 가치를 제시합니다. 그 다음 최신 파운데이션 모델(TimeGPT 등)과 딥러닝 아키텍처의 고도화된 기술력을 인터랙티브 탭으로 탐색하게 합니다. 이 기술력을 증명하는 삼성전자 실제 적용 성과(문서 03) 및 장기 예측 정확도 차트를 제시하며, 마지막으로 기업 신뢰도를 높이는 실적 테이블(문서 01)로 마무리합니다. 기술적 깊이와 비즈니스 임팩트를 동시에 전달하는 세일즈/기술 데모 하이브리드 구조입니다.] -->
+    
+    <!-- Visualization & Content Choices: [1. AI 아키텍처 (목표: 구조화) -> 인터랙티브 탭 (JS/HTML) -> MLP, RNN, Transformer 등 모델군별 특징 비교. 2. 고객 성과 지표 (목표: 강조) -> 빅 넘버 텍스트 카드 -> 38억 절감 등 팩트 기반 임팩트 (문서 03). 3. 모델 성능 추이 (목표: 데이터 비교) -> 라인 차트 (Chart.js) -> 데이터 기간에 따른 장기 예측 정확도 추세 확인 (문서 03 데이터 표 기반). 4. 연혁 및 사업 실적(목표: 정보 나열) -> 필터 가능한 데이터 테이블(HTML/JS) -> 신뢰성 구축 (문서 01). ※ 모든 그래픽은 CSS와 Unicode를 활용하며 SVG/Mermaid는 사용하지 않음.] -->
+    
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif; background-color: #f8fafc; }
+        
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        
+        @media (min-width: 768px) {
+            .chart-container { height: 400px; }
+        }
+
+        .tab-btn.active { border-bottom-color: #4f46e5; color: #4f46e5; font-weight: 600; }
+        .tab-content { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .tab-content.active { display: block; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -5px;
+            top: 6px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #4f46e5;
+        }
+
+        .latex-formula { font-family: 'Courier New', Courier, monospace; background-color: #f1f5f9; padding: 0.2rem 0.4rem; border-radius: 0.25rem; font-size: 0.9em; color: #334155; }
+    </style>
+</head>
+<body class="text-slate-800 antialiased">
+
+    <nav class="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <span class="text-2xl">🧠</span>
+                    <span class="font-bold text-xl tracking-tight text-indigo-900">DeepMine</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#overview" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors">솔루션 개요</a>
+                    <a href="#architecture" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors">AI 아키텍처</a>
+                    <a href="#impact" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors">도입 성과</a>
+                    <a href="#company" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors">기업 소개</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-16">
+        <!-- Hero Section -->
+        <section id="overview" class="relative bg-indigo-900 text-white overflow-hidden py-24 sm:py-32">
+            <div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-indigo-900 to-indigo-900"></div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+                <p class="text-indigo-300 font-semibold tracking-wide uppercase text-sm mb-4">We predict future</p>
+                <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
+                    인공지능을 활용한 데이터 기반<br><span class="text-blue-400">미래 수요 예측 솔루션</span>
+                </h1>
+                <p class="mt-4 max-w-3xl text-lg sm:text-xl text-indigo-100 mx-auto font-light leading-relaxed mb-10">
+                    특정 시점의 다양한 미래 확률 변수를 예측하는 범용 시계열 솔루션.<br> 딥마인은 독보적인 방법론을 통해 복잡한 시계열 데이터를 학습하고, 불확실한 미래의 수요를 정밀하게 예측합니다.
+                </p>
+                <div class="flex flex-wrap justify-center gap-4">
+                     <span class="px-4 py-2 bg-indigo-800/50 rounded-full text-sm font-medium border border-indigo-700">📦 부품 자재 수요</span>
+                     <span class="px-4 py-2 bg-indigo-800/50 rounded-full text-sm font-medium border border-indigo-700">⚙️ 수율 분석</span>
+                     <span class="px-4 py-2 bg-indigo-800/50 rounded-full text-sm font-medium border border-indigo-700">🏪 유통 수요 예측</span>
+                     <span class="px-4 py-2 bg-indigo-800/50 rounded-full text-sm font-medium border border-indigo-700">📈 금융/환율 예측</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 최신 아키텍처 및 파운데이션 모델 -->
+        <section id="architecture" class="py-20 bg-slate-50 border-b border-slate-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <span class="text-indigo-600 font-bold tracking-wider uppercase text-sm">Advanced AI Architecture</span>
+                    <h2 class="text-3xl font-bold text-slate-900 mt-2 mb-4">파운데이션 모델 및 예측 엔진군</h2>
+                    <p class="text-slate-600 text-lg leading-relaxed">
+                        전통적 딥러닝 패러다임을 넘어, 딥마인은 대규모 데이터로 사전 학습된 차세대 <strong>Zero-shot 파운데이션 모델</strong>을 도입하여 학습하지 않은 시계열 패턴까지 정밀하게 추론합니다.
+                    </p>
+                </div>
+
+                <div class="flex flex-wrap justify-center border-b border-slate-200 mb-8 gap-4">
+                    <button class="tab-btn active px-6 py-3 text-lg text-slate-500 hover:text-indigo-600 border-b-2 border-transparent transition-colors focus:outline-none" data-target="tab-foundation">파운데이션 모델</button>
+                    <button class="tab-btn px-6 py-3 text-lg text-slate-500 hover:text-indigo-600 border-b-2 border-transparent transition-colors focus:outline-none" data-target="tab-traditional">기반 딥러닝 아키텍처</button>
+                </div>
+
+                <!-- 탭 1: 파운데이션 모델 -->
+                <div id="tab-foundation" class="tab-content active">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12 max-w-6xl mx-auto">
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 border-t-4 border-t-blue-600 shadow-sm">
+                            <h4 class="font-bold text-xl text-slate-800 mb-3">TimeGPT (Nixtla)</h4>
+                            <p class="text-sm text-slate-600 mb-4 flex-grow">금융, 날씨, 에너지 등 1,000억 개 이상의 시점 이력으로 사전 학습된 인코더-디코더 트랜스포머. 로컬 위치 인코딩 및 잔차 연결 결합.</p>
+                            <span class="inline-block bg-blue-50 text-blue-700 text-xs px-2 py-1 rounded font-semibold border border-blue-100">Deterministic Point 예측</span>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 border-t-4 border-t-indigo-600 shadow-sm">
+                            <h4 class="font-bold text-xl text-slate-800 mb-3">Moirai (Salesforce)</h4>
+                            <p class="text-sm text-slate-600 mb-4 flex-grow">혼합 확률 분포를 출력하여 단일 미래 값 대신 <strong>전체 분포의 두께와 신뢰 구간</strong> 예측을 수행하는 확률적 아키텍처.</p>
+                            <span class="inline-block bg-indigo-50 text-indigo-700 text-xs px-2 py-1 rounded font-semibold border border-indigo-100">Probabilistic PDF 예측</span>
+                        </div>
+                        <div class="bg-white p-6 rounded-xl border border-slate-200 border-t-4 border-t-slate-600 shadow-sm md:col-span-2 lg:col-span-1">
+                            <h4 class="font-bold text-xl text-slate-800 mb-3">Chronos (Amazon)</h4>
+                            <p class="text-sm text-slate-600 mb-4 flex-grow">연속 시계열 변량을 고정 이산 값으로 <strong>토큰화(Tokenization)</strong>하여 대형 언어 모델(LLM)을 시계열 예측용으로 변환.</p>
+                            <span class="inline-block bg-slate-100 text-slate-700 text-xs px-2 py-1 rounded font-semibold border border-slate-200">LLM 기반 시계열 예측</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 탭 2: 기존 아키텍처 -->
+                <div id="tab-traditional" class="tab-content">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+                        <div class="bg-white shadow-sm p-6 rounded-xl border border-slate-200">
+                            <div class="text-3xl mb-3">🧮</div>
+                            <h4 class="font-bold text-lg text-indigo-900 mb-2">MLP Family</h4>
+                            <p class="text-xs text-slate-500 mb-3">NHITS, NBEATS, MLP</p>
+                            <p class="text-sm text-slate-700">단일 학습으로 모든 미래 시점을 한 번에 예측하는 <strong>Direct Forecasting</strong>. 오류 누적이 적습니다.</p>
+                        </div>
+                        <div class="bg-white shadow-sm p-6 rounded-xl border border-slate-200">
+                            <div class="text-3xl mb-3">🔄</div>
+                            <h4 class="font-bold text-lg text-indigo-900 mb-2">RNN Family</h4>
+                            <p class="text-xs text-slate-500 mb-3">LSTM, GRU, DeepAR</p>
+                            <p class="text-sm text-slate-700">이전 시점을 다시 입력받는 <strong>Recursive Forecasting</strong>. 시계열의 순차적 흐름을 파악하며 계산 효율이 높습니다.</p>
+                        </div>
+                        <div class="bg-white shadow-sm p-6 rounded-xl border border-slate-200">
+                            <div class="text-3xl mb-3">🧩</div>
+                            <h4 class="font-bold text-lg text-indigo-900 mb-2">Transformer Family</h4>
+                            <p class="text-xs text-slate-500 mb-3">Autoformer, TFT</p>
+                            <p class="text-sm text-slate-700">멀티 헤드 셀프 어텐션 구조를 활용하여 장기 의존성을 파악하고 동적 상황 융합에 강합니다.</p>
+                        </div>
+                        <div class="bg-white shadow-sm p-6 rounded-xl border border-slate-200">
+                            <div class="text-3xl mb-3">🔍</div>
+                            <h4 class="font-bold text-lg text-indigo-900 mb-2">CNN Family</h4>
+                            <p class="text-xs text-slate-500 mb-3">BiTCN</p>
+                            <p class="text-sm text-slate-700">팽창 합성곱 필터 기반으로 수용 영역을 넓혀 국소 시계열 패턴을 고속으로 스캔합니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 도입 성과 섹션 (03번 문서 기반) -->
+        <section id="impact" class="py-20 bg-white border-b border-slate-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <span class="text-indigo-600 font-bold tracking-wider uppercase text-sm">Customer Case Study</span>
+                    <h2 class="text-3xl font-bold text-slate-900 mt-2 mb-4">삼성전자 무선사업부 도입 성과</h2>
+                    <p class="text-slate-600 text-lg leading-relaxed">
+                        (주)딥마인은 독자적인 AI 기술력으로 삼성전자 무선사업부의 공급망 관리(SCM) 영역을 지능화하였습니다. 글로벌 서비스 센터의 부품 자재 소요량을 예측하여 막대한 비용을 절감 중입니다.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                    <div class="bg-indigo-50 rounded-2xl p-8 border border-indigo-100 text-center shadow-sm">
+                        <div class="text-4xl mb-4">💰</div>
+                        <h3 class="text-slate-600 font-bold mb-2">초기 도입 절감액</h3>
+                        <div class="text-4xl font-extrabold text-indigo-700 mb-2">약 38억 원</div>
+                        <p class="text-sm text-slate-500 mt-4">2019년 모델 구축 초기 가동 단계에서 재고 과다/부족 최소화로 이룬 공급망 재고 비용 직접 절감액</p>
+                    </div>
+                    
+                    <div class="bg-indigo-50 rounded-2xl p-8 border border-indigo-100 text-center shadow-sm">
+                        <div class="text-4xl mb-4">🚀</div>
+                        <h3 class="text-slate-600 font-bold mb-2">신규 제품(NPI) 적중률</h3>
+                        <div class="text-4xl font-extrabold text-indigo-700 mb-2">70% 이상</div>
+                        <p class="text-sm text-slate-500 mt-4">과거 판매 데이터가 전무한 초기 론칭 상황(3개월)에서도 높은 소요율 예측으로 결품/과잉 발주 방어</p>
+                    </div>
+
+                    <div class="bg-indigo-50 rounded-2xl p-8 border border-indigo-100 text-center shadow-sm md:col-span-3 lg:col-span-1">
+                        <div class="text-4xl mb-4">🔄</div>
+                        <h3 class="text-slate-600 font-bold mb-2">지속적 경제 효과</h3>
+                        <div class="text-3xl font-extrabold text-indigo-700 mb-2 mt-3">매년 수억 원 규모</div>
+                        <p class="text-sm text-slate-500 mt-4">데이터 누적에 따른 성능 재학습을 통해 불필요한 물류 및 폐기 재고 예방 효과 상시 발생</p>
+                    </div>
+                </div>
+
+                <!-- 예측 정확도 차트 (03번 문서 데이터 기반) -->
+                <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm max-w-5xl mx-auto">
+                    <div class="mb-8">
+                        <h3 class="text-2xl font-bold text-slate-800 mb-2">과거 이력 축적에 따른 장기 수요예측 모델 성능</h3>
+                        <p class="text-slate-600 text-sm">
+                            가용 데이터가 늘어날수록 딥러닝 모델이 추세를 인지하여, 각 시점 후 최소 7개월~최대 84개월(7년) 후까지의 예측 정확도가 향상됩니다.
+                        </p>
+                    </div>
+                    
+                    <div class="chart-container">
+                        <canvas id="accuracyChart"></canvas>
+                    </div>
+                    
+                    <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6 p-4 border-t border-slate-100">
+                        <div>
+                            <span class="text-indigo-600 font-bold block mb-1">💡 24개월 시점의 안정화 임계점</span>
+                            <p class="text-sm text-slate-600">이력 데이터가 24개월 이상 누적되는 순간부터 <strong>84%대의 고도의 안정적인 정확도</strong>로 수렴합니다.</p>
+                        </div>
+                        <div>
+                            <span class="text-indigo-600 font-bold block mb-1">💡 최대 7년 후의 장기 안정성</span>
+                            <p class="text-sm text-slate-600">최장기 단계인 78개월 활용 예측에서도 <strong>81.7%</strong>의 높은 정밀도를 유지하여 장기 공급 보증 산정에 활용됩니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 기업 소개 및 실적 (문서 01 기반) -->
+        <section id="company" class="py-20 bg-slate-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <h2 class="text-3xl font-bold text-slate-900 mb-4">(주)딥마인 기업 개요 및 실적</h2>
+                    <p class="text-slate-600 text-lg leading-relaxed">
+                        2011년부터 축적된 경험과 전문 인력을 바탕으로 제조, 유통, 금융 등 다양한 고객사의 비즈니스 인텔리전스를 지원합니다.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 mb-16">
+                    <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm lg:col-span-1">
+                        <h3 class="text-xl font-bold text-indigo-900 mb-6 border-b pb-2">기업 일반 현황</h3>
+                        <ul class="space-y-4 text-sm">
+                            <li class="flex flex-col"><span class="text-slate-500 mb-1">회사명</span> <span class="font-bold text-slate-800 text-lg">(주)딥마인 (DeepMine)</span></li>
+                            <li class="flex flex-col"><span class="text-slate-500 mb-1">대표자</span> <span class="font-medium text-slate-800">박경원</span></li>
+                            <li class="flex flex-col"><span class="text-slate-500 mb-1">설립일</span> <span class="font-medium text-slate-800">2021년 12월 20일</span></li>
+                            <li class="flex flex-col"><span class="text-slate-500 mb-1">분야 사업 기간</span> <span class="font-medium text-slate-800">2011년 6월 ~ 현재</span></li>
+                        </ul>
+                    </div>
+
+                    <div class="lg:col-span-2 bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+                        <h3 class="text-xl font-bold text-indigo-900 mb-6 border-b pb-2">최근 주요 연혁</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 pl-4 border-l-2 border-indigo-100 ml-2">
+                            <div class="relative timeline-item pl-4">
+                                <div class="text-sm font-bold text-indigo-600 mb-0.5">2023. 10</div>
+                                <div class="text-slate-800 font-medium text-sm">수요예측 시스템 내 GPU 실사용화</div>
+                            </div>
+                            <div class="relative timeline-item pl-4">
+                                <div class="text-sm font-bold text-indigo-600 mb-0.5">2023. 07</div>
+                                <div class="text-slate-600 text-sm">수요예측 모델링용 전용 GPU 도입</div>
+                            </div>
+                            <div class="relative timeline-item pl-4">
+                                <div class="text-sm font-bold text-indigo-600 mb-0.5">2022. 09</div>
+                                <div class="text-slate-600 text-sm">서비스 자재 수요예측 GPU 도입 PoC</div>
+                            </div>
+                            <div class="relative timeline-item pl-4">
+                                <div class="text-sm font-bold text-indigo-600 mb-0.5">2021. 12</div>
+                                <div class="text-slate-800 font-bold text-sm">(주)딥마인 법인 설립</div>
+                            </div>
+                            <div class="relative timeline-item pl-4 sm:col-span-2">
+                                <div class="text-sm font-bold text-indigo-600 mb-0.5">2020. 01 ~ 현재</div>
+                                <div class="text-slate-600 text-sm">삼성전자 마케팅 분석 시스템(ASAP) 데이터 과학자 지원 및 모델 운영</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+                    <h3 class="text-xl font-bold text-indigo-900 mb-6 border-b pb-2 flex justify-between items-end">
+                        <span>주요 프로젝트 실적</span>
+                        <span class="text-xs font-normal text-slate-500">2011.06 ~ 현재</span>
+                    </h3>
+                    
+                    <div class="mb-4 flex flex-wrap gap-2">
+                        <button class="filter-btn text-xs font-semibold px-4 py-1.5 bg-indigo-100 text-indigo-700 rounded-full hover:bg-indigo-200 active transition" data-filter="all">전체 내역</button>
+                        <button class="filter-btn text-xs font-semibold px-4 py-1.5 bg-slate-100 text-slate-600 rounded-full hover:bg-slate-200 transition" data-filter="삼성">삼성 그룹사</button>
+                        <button class="filter-btn text-xs font-semibold px-4 py-1.5 bg-slate-100 text-slate-600 rounded-full hover:bg-slate-200 transition" data-filter="공공">공공/금융/기타</button>
+                    </div>
+
+                    <div class="overflow-x-auto max-h-[400px] overflow-y-auto pr-2 border rounded-lg border-slate-100">
+                        <table class="min-w-full divide-y divide-slate-200">
+                            <thead class="bg-slate-50 sticky top-0 z-10">
+                                <tr>
+                                    <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-600 uppercase w-1/4">고객사</th>
+                                    <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-600 uppercase w-1/3">프로젝트명</th>
+                                    <th scope="col" class="px-4 py-3 text-left text-xs font-bold text-slate-600 uppercase hidden md:table-cell">상세 내용</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-slate-100" id="projectTableBody">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="flex items-center gap-2">
+                <span class="text-2xl">🧠</span>
+                <span class="font-bold text-xl text-white tracking-wider">DeepMine</span>
+            </div>
+            <div class="text-center md:text-right text-sm">
+                <p>서울특별시 금천구 벚꽃로 298, 1301호-12</p>
+                <p class="mt-1">© 2026 (주)딥마인. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // Tab Logic
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    tabBtns.forEach(b => b.classList.remove('active', 'border-indigo-600', 'text-indigo-600'));
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    
+                    btn.classList.add('active', 'border-indigo-600', 'text-indigo-600');
+                    const targetId = btn.getAttribute('data-target');
+                    document.getElementById(targetId).classList.add('active');
+                });
+            });
+
+            // Chart.js Setup for Accuracy (Based on Document 03 Data)
+            Chart.defaults.font.family = "'Pretendard', sans-serif";
+            Chart.defaults.color = '#64748b';
+
+            const accCtx = document.getElementById('accuracyChart').getContext('2d');
+            
+            // Data exactly from 03_use_and_customer_cases.md table
+            const labels = ['M06 (6개월)', 'M12 (12개월)', 'M24 (24개월)', 'M36 (36개월)', 'M48 (48개월)', 'M60 (60개월)', 'M72 (72개월)', 'M78 (78개월)'];
+            const accuracyData = [73.6, 75.1, 84.7, 84.0, 83.6, 84.2, 84.3, 81.7];
+
+            new Chart(accCtx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: '종합 예측 정확도 (%)',
+                        data: accuracyData,
+                        borderColor: '#4f46e5', // Indigo 600
+                        backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                        borderWidth: 3,
+                        pointBackgroundColor: '#ffffff',
+                        pointBorderColor: '#4f46e5',
+                        pointBorderWidth: 2,
+                        pointRadius: 5,
+                        pointHoverRadius: 8,
+                        fill: true,
+                        tension: 0.3 // Smooth line
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            backgroundColor: '#1e293b', 
+                            padding: 12,
+                            titleFont: { size: 13, weight: 'normal' },
+                            bodyFont: { size: 16, weight: 'bold' },
+                            displayColors: false,
+                            callbacks: {
+                                title: function(context) { return '데이터 축적: ' + context[0].label; },
+                                label: function(context) { return '정확도: ' + context.parsed.y + '%'; }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            min: 70,
+                            max: 90,
+                            grid: { color: '#f1f5f9' },
+                            ticks: { 
+                                stepSize: 5,
+                                callback: function(value) { return value + '%'; } 
+                            },
+                            title: { display: true, text: 'Accuracy (%)', font: {size: 12} }
+                        },
+                        x: {
+                            grid: { display: false },
+                        }
+                    }
+                }
+            });
+
+            // Project Table Data (From 01_company_overview.md)
+            const projects = [
+                { client: '삼성전자', cat: '삼성', name: 'ASAP(마케팅 분석 시스템) 데이터 과학자 지원', desc: '- 서비스 자재 AI 수요예측 정확도 개선<br>- Installed Base AI 수요예측 모델 구축<br>- ASAP 마케팅 데이터 다차원 분석' },
+                { client: '삼성전자', cat: '삼성', name: '무선사업부 서비스 자재 수요예측', desc: '- 서비스 자재 인공지능 기반 수요예측 모델 구축' },
+                { client: '삼성SDS', cat: '삼성', name: 'ASAP 데이터 과학자 지원', desc: '- ASAP S21 Sellout 예측을 위한 SLBF 예측 모델링 구현' },
+                { client: '한국정보화진흥원', cat: '공공', name: '범정부 데이터플랫폼 구축 1차 사업', desc: '- ASAP 데이터 거버넌스 및 표준화 제안<br>- 데이터 연관도 분석 및 아키텍처 개발' },
+                { client: '기아자동차', cat: '공공', name: '해외 데이터 체계 고도화 사업', desc: '- 글로벌 데이터 Taxonomy 정립 및 AI 텍스트 마이닝' },
+                { client: '현대자동차', cat: '공공', name: '낙찰가율 예측 및 분석', desc: '- 자동차 부품 조달 낙찰가율 시계열 예측 및 요인 분석' },
+                { client: '한국거래소', cat: '공공', name: '인공지능 기술의 시장감시 적용모델 개발', desc: '- 주식 시장 내 이상 징후 감시 및 지수 예측' },
+                { client: '한국총판', cat: '공공', name: '인공지능 기반 영업기회 추천 솔루션', desc: '- 뉴스/트렌드 크롤링 기반 B2B 영업기회 자동 추천' },
+                { client: '삼성전자 캐나다/싱가포르', cat: '삼성', name: 'Marketing Mix Modeling', desc: '- 북미/아시아 법인 마케팅 효과 및 ROI 최적화 분석' },
+                { client: '삼성전자 인도법인', cat: '삼성', name: '서남아법인 Sellout Forecasting & MMM', desc: '- HHP Sellout 예측 모델 설계 및 마케팅 믹스 최적화' },
+                { client: '국토교통부', cat: '공공', name: '공간 빅데이터 구축 및 AI 모델링', desc: '- 토지 비축용 공간 통계 및 AI 예측 모델링 구현' },
+                { client: '삼성디스플레이', cat: '삼성', name: 'R 통계학 전문 교육', desc: '- 시각화, 시계열 통계 모델링 역량 강화 교육' },
+                { client: '롯데면세점', cat: '공공', name: '마케팅 시스템 구축', desc: '- 면세점 상품군 분류 및 기여도 분석' },
+                { client: '알리안츠생명', cat: '공공', name: '보험사기 및 언더라이팅 분석', desc: '- 이상징후 탐지 기반 통계 분석 모델 설계' },
+                { client: '동부화재', cat: '공공', name: '고객 세분화 분석', desc: '- 이탈 예측 알고리즘 기반 고객 세분화 방지책 수립' },
+                { client: '삼성증권', cat: '삼성', name: '퇴직연금 시스템 개발', desc: '- 퇴직연금 분석 모듈 설계 및 데이터 모델 개발' }
+            ];
+
+            const tbody = document.getElementById('projectTableBody');
+            
+            function renderTable(filterCat) {
+                tbody.innerHTML = '';
+                let dataToRender = projects;
+                
+                if (filterCat !== 'all') {
+                    dataToRender = projects.filter(p => p.cat === filterCat);
+                }
+
+                dataToRender.forEach(p => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'hover:bg-indigo-50/40 transition-colors border-b border-slate-100 last:border-0';
+                    tr.innerHTML = `
+                        <td class="px-4 py-4 text-sm font-bold text-indigo-900 align-top whitespace-nowrap">${p.client}</td>
+                        <td class="px-4 py-4 text-sm font-medium text-slate-800 align-top">${p.name}</td>
+                        <td class="px-4 py-4 text-sm text-slate-600 hidden md:table-cell align-top leading-relaxed">${p.desc}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            // Initial Render
+            renderTable('all');
+
+            // Filter Functionality
+            const filterBtns = document.querySelectorAll('.filter-btn');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    filterBtns.forEach(b => {
+                        b.classList.remove('bg-indigo-100', 'text-indigo-700', 'active');
+                        b.classList.add('bg-slate-100', 'text-slate-600');
+                    });
+                    const targetBtn = e.currentTarget;
+                    targetBtn.classList.remove('bg-slate-100', 'text-slate-600');
+                    targetBtn.classList.add('bg-indigo-100', 'text-indigo-700', 'active');
+
+                    const cat = targetBtn.getAttribute('data-filter');
+                    renderTable(cat);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

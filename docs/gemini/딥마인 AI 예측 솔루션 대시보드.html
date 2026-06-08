@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>딥마인(DeepMine) - AI 미래 수요 예측 솔루션</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Chosen Palette: [Slate Backgrounds (slate-50), Deep Indigo Primary (indigo-900), Vibrant Blue Accents (blue-600), Clean White Cards (white)] -->
+    
+    <!-- Application Structure Plan: [본 SPA는 딥마인의 기업 역량과 AI 기술력을 효과적으로 전달하기 위해 '대시보드형 스토리텔링' 구조로 설계되었습니다. 상단(Hero)에서 기업의 핵심 비전과 정량적 성과(절감액, 정확도)를 즉각적으로 제시하여 신뢰도를 높입니다. 이후 기술 스택(프레임워크 및 모델군)을 인터랙티브 탭과 카드로 구성하여 복잡한 아키텍처를 쉽게 탐색하도록 돕습니다. 성과 지표는 Chart.js를 활용하여 데이터 축적에 따른 정확도 향상 추이(문서 03 참조)를 시각화하며, 마지막으로 실제 고객사(삼성전자 등) 적용 사례와 타임라인을 배치하여 실증적 가치를 증명하는 흐름으로 유도합니다. 이는 단순 보고서 나열보다 사용자(잠재 고객)가 솔루션의 비즈니스 가치와 기술적 깊이를 직관적으로 파악하는 데 최적화된 구조입니다.] -->
+    
+    <!-- Visualization & Content Choices: [1. 주요 성과 지표(목표: 정보 전달) -> 강조된 텍스트 카드(CSS/HTML) -> 직관적 수치 전달 (문서 03 재무효과). 2. AI 예측 아키텍처(목표: 구조화) -> 인터랙티브 탭 UI(HTML/JS) -> 복잡한 기술 스택의 단계적 탐색 지원. 3. 모델 성능 추이 (목표: 데이터 비교) -> 라인 차트 (Chart.js) -> 데이터 기간에 따른 장기 예측 정확도 추세 확인 (문서 03 데이터 표 기반). 4. 연혁 및 사업 실적(목표: 정보 나열) -> 반응형 타임라인 및 데이터 테이블(HTML/CSS) -> 신뢰성 구축 (문서 01 실적 기반). ※ 모든 그래픽은 CSS와 Unicode를 활용하며 SVG/Mermaid는 사용하지 않음.] -->
+    
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        body { font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, Roboto, 'Helvetica Neue', 'Segoe UI', 'Apple SD Gothic Neo', 'Noto Sans KR', 'Malgun Gothic', sans-serif; background-color: #f8fafc; }
+        
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 400px;
+        }
+        
+        @media (min-width: 768px) {
+            .chart-container { height: 400px; }
+        }
+
+        .tab-btn.active { border-bottom-color: #4f46e5; color: #4f46e5; font-weight: 600; }
+        .tab-content { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .tab-content.active { display: block; }
+        
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -5px;
+            top: 6px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #4f46e5;
+        }
+
+        .flow-box {
+            background-color: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            text-align: center;
+            font-weight: 600;
+            color: #1e293b;
+            box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            position: relative;
+            z-index: 10;
+        }
+
+        .flow-arrow {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 2rem;
+            color: #94a3b8;
+            font-size: 1.5rem;
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased">
+
+    <nav class="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex-shrink-0 flex items-center gap-2 cursor-pointer" onclick="window.scrollTo(0,0)">
+                    <span class="text-2xl">🧠</span>
+                    <span class="font-bold text-xl tracking-tight text-indigo-900">DeepMine</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#overview" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors">솔루션 개요</a>
+                    <a href="#impact" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors">도입 성과 (삼성전자)</a>
+                    <a href="#architecture" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors">AI 아키텍처</a>
+                    <a href="#company" class="text-slate-600 hover:text-indigo-600 font-medium transition-colors">기업 소개</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-16">
+        <section id="overview" class="relative bg-indigo-900 text-white overflow-hidden py-24 sm:py-32">
+            <div class="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-white via-indigo-900 to-indigo-900"></div>
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div class="text-center">
+                    <p class="text-indigo-300 font-semibold tracking-wide uppercase text-sm mb-4">We predict future</p>
+                    <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight mb-6 leading-tight">
+                        딥마인 AI 미래 수요 예측 솔루션
+                    </h1>
+                    <p class="mt-4 max-w-3xl text-lg sm:text-xl text-indigo-100 mx-auto font-light leading-relaxed mb-10">
+                        특정 시점의 다양한 미래 확률 변수를 예측하는 범용 시계열 솔루션입니다. 고전 통계 모델부터 최신 시계열 파운데이션 모델까지 하나의 프레임워크 안에 응집하여 도메인별 최적의 예측 성능을 보장합니다.
+                    </p>
+                </div>
+
+                <div class="mt-16 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <div class="bg-indigo-800/40 border border-indigo-700/50 p-6 rounded-xl backdrop-blur-sm">
+                        <div class="text-3xl mb-3">📦</div>
+                        <h3 class="text-xl font-bold mb-2">상품 및 부품 자재 수요 예측</h3>
+                        <p class="text-indigo-200 text-sm">대기업 및 중소제조사의 완제품 수요 및 생산에 필요한 하위 자재 조달 소요량 예측</p>
+                    </div>
+                    <div class="bg-indigo-800/40 border border-indigo-700/50 p-6 rounded-xl backdrop-blur-sm">
+                        <div class="text-3xl mb-3">⚙️</div>
+                        <h3 class="text-xl font-bold mb-2">제조 수율 분석</h3>
+                        <p class="text-indigo-200 text-sm">제조업 현장의 생산 수율(Yield) 추이 예측 및 최적화 요인 탐색</p>
+                    </div>
+                    <div class="bg-indigo-800/40 border border-indigo-700/50 p-6 rounded-xl backdrop-blur-sm">
+                        <div class="text-3xl mb-3">🏪</div>
+                        <h3 class="text-xl font-bold mb-2">유통 수요 예측</h3>
+                        <p class="text-indigo-200 text-sm">온·오프라인 매장 및 물류 네트워크의 채널별 판매량 수요 예측</p>
+                    </div>
+                    <div class="bg-indigo-800/40 border border-indigo-700/50 p-6 rounded-xl backdrop-blur-sm lg:col-span-1 md:col-span-2">
+                        <div class="text-3xl mb-3">🌍</div>
+                        <h3 class="text-xl font-bold mb-2">외생 경제 변수 예측</h3>
+                        <p class="text-indigo-200 text-sm">원달러 등 주요 통화 환율 추이 및 글로벌 원자재 가격 동향 예측</p>
+                    </div>
+                    <div class="bg-indigo-800/40 border border-indigo-700/50 p-6 rounded-xl backdrop-blur-sm lg:col-span-2 md:col-span-2">
+                        <div class="text-3xl mb-3">📈</div>
+                        <h3 class="text-xl font-bold mb-2">금융 변수 분석</h3>
+                        <p class="text-indigo-200 text-sm">금융 상품의 트래픽, 거래량, 가격 요인 변동 추세 분석</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 도입 성과 섹션 (03번 문서 기반 강화) -->
+        <section id="impact" class="py-20 bg-white border-b border-slate-200">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-16">
+                    <span class="text-indigo-600 font-bold tracking-wider uppercase text-sm">Customer Case Study</span>
+                    <h
