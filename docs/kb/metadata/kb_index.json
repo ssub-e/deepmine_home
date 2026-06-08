@@ -1,0 +1,132 @@
+{
+  "kb_version": "1.0.0",
+  "last_updated": "2026-06-08",
+  "company": "딥마인 (DeepMine)",
+  "purpose": "홈페이지 개편 및 RAG 기반 AI 응답을 위한 통합 지식베이스",
+  "source_documents": [
+    "딥마인 AI 미래 수요 예측 솔루션 소개.pptx",
+    "딥마인 AI 미래예측 교육자료.pdf",
+    "딥마인 회사 소개 및 AI 미래 수요 예측 솔루션.pdf",
+    "딥마인 businesscard.jpg",
+    "deepmine.co.kr 홈페이지 소스코드"
+  ],
+  "documents": [
+    {
+      "id": "company-01",
+      "path": "01_company/01_company_overview.md",
+      "title": "(주)딥마인 회사 개요",
+      "title_en": "DeepMine Company Overview",
+      "category": "Company",
+      "keywords": ["딥마인", "DeepMine", "박경원", "AI 회사", "수요예측", "설립", "비전", "미션", "CI"],
+      "summary": "회사 일반현황, 대표자 정보, 설립일, 주소, 사업자등록번호, 비전/미션, CI/BI 가이드라인"
+    },
+    {
+      "id": "company-02",
+      "path": "01_company/02_history_and_portfolio.md",
+      "title": "연혁 및 프로젝트 포트폴리오",
+      "title_en": "History & Project Portfolio",
+      "category": "Company",
+      "keywords": ["연혁", "프로젝트", "실적", "삼성전자", "기아자동차", "현대자동차", "한국거래소", "고객사"],
+      "summary": "2011년부터 현재까지의 상세 연혁, 15개 이상의 프로젝트 실적, 주요 고객사 목록"
+    },
+    {
+      "id": "solution-01",
+      "path": "02_solution/01_solution_overview.md",
+      "title": "AI 미래 수요 예측 솔루션 개요",
+      "title_en": "AI Demand Forecasting Solution Overview",
+      "category": "Solution",
+      "keywords": ["솔루션", "수요예측", "시계열", "AI", "프레임워크", "활용 분야"],
+      "summary": "솔루션 핵심 개요, 주요 활용 분야, 비즈니스 목표, 3-Layer 아키텍처, 도입 프로세스"
+    },
+    {
+      "id": "solution-02",
+      "path": "02_solution/02_tech_stack_and_architecture.md",
+      "title": "기술 스택 및 AI 아키텍처",
+      "title_en": "Tech Stack & AI Architecture",
+      "category": "Solution",
+      "keywords": ["기술스택", "MXNet", "PyTorch", "Optuna", "MLP", "RNN", "Transformer", "CNN", "HPO", "데이터증강"],
+      "summary": "머신러닝/딥러닝 프레임워크, 예측 알고리즘 범주, 4대 모델군 분류, HPO 전략, 데이터 증강 기법"
+    },
+    {
+      "id": "usecase-01",
+      "path": "03_use_cases/01_industry_use_cases.md",
+      "title": "산업별 활용 사례",
+      "title_en": "Industry Use Cases",
+      "category": "Use Cases",
+      "keywords": ["제조", "유통", "금융", "환율", "원자재", "수율", "서비스자재", "수요예측"],
+      "summary": "제조/유통/금융/서비스 부문별 상세 활용 시나리오, 기대 효과, 적용 데이터"
+    },
+    {
+      "id": "customer-01",
+      "path": "04_customer_cases/01_samsung_case_study.md",
+      "title": "삼성전자 무선사업부 도입 사례 및 성과",
+      "title_en": "Samsung Electronics Case Study",
+      "category": "Customer Cases",
+      "keywords": ["삼성전자", "서비스자재", "Installed Base", "NPI", "비용절감", "정확도", "M06", "M78"],
+      "summary": "삼성전자 무선사업부 3대 프로젝트, 재무 효과(38억원), M06~M78 정확도 데이터, 핵심 인사이트"
+    },
+    {
+      "id": "tech-01",
+      "path": "05_technology/01_timeseries_fundamentals.md",
+      "title": "시계열 데이터 기초 및 전처리",
+      "title_en": "Time Series Fundamentals & Preprocessing",
+      "category": "Technology",
+      "keywords": ["시계열", "정상성", "차분", "KPSS", "스케일링", "전처리", "손실함수", "MAE", "MSE"],
+      "summary": "정상성/비정상성, 로그변환/차분, 단위근검정, 딥러닝 스케일링 전략, 손실함수 가이드"
+    },
+    {
+      "id": "tech-02",
+      "path": "05_technology/02_statistical_models.md",
+      "title": "통계 기반 예측 모델 (ARIMA/SARIMA)",
+      "title_en": "Statistical Forecasting Models",
+      "category": "Technology",
+      "keywords": ["ARIMA", "SARIMA", "ACF", "PACF", "AICc", "MLE", "자기회귀", "이동평균"],
+      "summary": "ARIMA 수식/구조, ACF/PACF 모델 식별, 파라미터 추정, 주요 특수모형"
+    },
+    {
+      "id": "tech-03",
+      "path": "05_technology/03_deep_learning_forecasting.md",
+      "title": "딥러닝 기반 시계열 예측",
+      "title_en": "Deep Learning Time Series Forecasting",
+      "category": "Technology",
+      "keywords": ["딥러닝", "NHITS", "NBEATS", "LSTM", "DeepAR", "TFT", "PatchTST", "BiTCN"],
+      "summary": "4대 아키텍처 계열 상세, Direct/Recursive 예측, 각 모델별 특징/강점/적용 시나리오"
+    },
+    {
+      "id": "tech-04",
+      "path": "05_technology/04_foundation_models.md",
+      "title": "파운데이션 예측 모델",
+      "title_en": "Foundation Forecasting Models",
+      "category": "Technology",
+      "keywords": ["파운데이션모델", "TimeGPT", "Moirai", "Chronos", "Lag-Llama", "TTM", "제로샷", "파인튜닝"],
+      "summary": "TimeGPT/Moirai/Chronos/Lag-Llama/TTM 개별 상세, 제로샷 추론, 외생변수 전략"
+    },
+    {
+      "id": "homepage-01",
+      "path": "06_homepage_content/01_faq.md",
+      "title": "자주 묻는 질문 (FAQ)",
+      "title_en": "Frequently Asked Questions",
+      "category": "Homepage Content",
+      "keywords": ["FAQ", "질문", "답변", "도입", "데이터", "정확도", "비용"],
+      "summary": "잠재 고객이 자주 묻는 질문과 답변, 기술/비즈니스/도입 관련 FAQ"
+    },
+    {
+      "id": "homepage-02",
+      "path": "06_homepage_content/02_legal_and_privacy.md",
+      "title": "법적 고지 및 개인정보처리방침",
+      "title_en": "Legal Notices & Privacy Policy",
+      "category": "Homepage Content",
+      "keywords": ["개인정보", "처리방침", "이메일수집거부", "법적고지", "보호책임자"],
+      "summary": "개인정보처리방침, 이메일무단수집거부, 개인정보보호책임자 정보"
+    },
+    {
+      "id": "homepage-03",
+      "path": "06_homepage_content/03_glossary.md",
+      "title": "용어집",
+      "title_en": "Glossary",
+      "category": "Homepage Content",
+      "keywords": ["용어", "정의", "시계열", "ARIMA", "딥러닝", "파운데이션모델", "수요예측"],
+      "summary": "홈페이지 및 솔루션에서 사용되는 핵심 기술 용어의 정의와 설명"
+    }
+  ]
+}
