@@ -254,8 +254,8 @@ export default function App() {
       <nav className="fixed top-0 w-full h-20 z-50 bg-background/80 backdrop-blur-md border-b border-border/60 transition-colors duration-300">
         <div className="max-w-[1200px] mx-auto h-full px-4 sm:px-6 lg:px-8 flex justify-between items-center">
           <div className="flex-shrink-0 flex items-center cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-            <img src="/딥마인 logo.png" alt="딥마인 로고" className="w-8 h-8 mr-3 object-contain" />
-            <img src={isDarkMode ? '/deepmine logo white.png' : '/deepmine logo dark.png'} alt="DeepMine" className="h-5 object-contain" />
+            <img src="/logotest.png" alt="딥마인 로고" className="w-8 h-8 mr-3 object-contain" />
+            <img src={isDarkMode ? '/deepmine logo light.png' : '/deepmine logo dark.png'} alt="DeepMine" className="h-5 object-contain" />
           </div>
 
           {/* 데스크탑 메뉴 */}
@@ -1060,8 +1060,8 @@ export default function App() {
             {/* 브랜드 정보 */}
             <div className="col-span-1 md:col-span-2">
               <div className="flex items-center mb-4">
-                <img src="/딥마인 logo.png" alt="딥마인 로고" className="w-8 h-8 mr-3 object-contain" />
-                <img src="/deepmine logo white.png" alt="DeepMine" className="h-5 object-contain" />
+                <img src="/logotest.png" alt="딥마인 로고" className="w-8 h-8 mr-3 object-contain" />
+                <img src="/deepmine logo light.png" alt="DeepMine" className="h-5 object-contain" />
               </div>
               <p className="text-slate-400 text-sm leading-relaxed max-w-sm">
                 제조/유통/금융 데이터 분석 및 인공 지능 개발 전문 기업입니다.
