@@ -162,14 +162,14 @@ export default function App() {
       {/* 개인정보처리방침 모달 */}
       {isPrivacyModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
-          <div 
+          <div
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={() => setIsPrivacyModalOpen(false)}
           ></div>
           <div className="relative bg-[#111827] border border-slate-800 w-full max-w-2xl max-h-[80vh] overflow-y-auto rounded-2xl p-8 shadow-2xl">
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-xl font-bold text-white">개인정보처리방침</h3>
-              <button 
+              <button
                 onClick={() => setIsPrivacyModalOpen(false)}
                 className="text-slate-400 hover:text-white p-2"
               >
@@ -178,7 +178,7 @@ export default function App() {
             </div>
             <div className="text-slate-300 text-sm leading-relaxed space-y-4">
               <p className="text-slate-400 italic mb-4">(주)딥마인(이하 '회사')은 고객의 개인정보를 소중하게 생각하며, "개인정보 보호법" 등 관련 법령을 준수하고 있습니다.</p>
-              
+
               <section>
                 <h4 className="font-bold text-white mb-2">1. 개인정보의 수집 및 이용 목적</h4>
                 <p>회사는 홈페이지 내 '프로젝트 문의하기' 기능을 통해 접수된 고객의 문의 사항에 대한 확인 및 답변, 상담 서비스 제공을 목적으로 개인정보를 처리합니다.</p>
@@ -211,7 +211,7 @@ export default function App() {
                 <p>성명: 박경원 (대표) | 연락처: 010-4231-4907 / kwpark@deepmine.co.kr</p>
               </section>
 
-              <p className="text-xs text-slate-500 mt-8 pt-4 border-t border-slate-800">공고일자: 2024년 5월 11일 / 시행일자: 2024년 5월 11일</p>
+              <p className="text-xs text-slate-500 mt-8 pt-4 border-t border-slate-800">공고일자: 2026년 5월 11일 / 시행일자: 2026년 5월 11일</p>
             </div>
           </div>
         </div>
@@ -220,14 +220,14 @@ export default function App() {
       {/* 이메일무단수집거부 모달 */}
       {isEmailModalOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center px-4">
-          <div 
+          <div
             className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             onClick={() => setIsEmailModalOpen(false)}
           ></div>
           <div className="relative bg-[#111827] border border-slate-800 w-full max-w-md rounded-2xl p-8 shadow-2xl">
             <div className="flex justify-between items-center mb-6">
               <h3 className="text-xl font-bold text-white">이메일무단수집거부</h3>
-              <button 
+              <button
                 onClick={() => setIsEmailModalOpen(false)}
                 className="text-slate-400 hover:text-white p-2"
               >
@@ -237,7 +237,7 @@ export default function App() {
             <div className="text-slate-300 text-sm leading-relaxed space-y-4">
               <p>본 웹사이트에 게시된 이메일 주소가 전자우편 수집 프로그램이나 그 밖의 기술적 장치를 이용하여 무단으로 수집되는 것을 거부합니다.</p>
               <p>이를 위반 시 <span className="text-blue-400">정보통신망 이용촉진 및 정보보호 등에 관한 법률</span>에 의해 형사 처벌될 수 있음을 유념하시기 바랍니다.</p>
-              <p className="text-xs text-slate-500 mt-8 pt-4 border-t border-slate-800 text-center italic">게시일자: 2024년 5월 11일</p>
+              <p className="text-xs text-slate-500 mt-8 pt-4 border-t border-slate-800 text-center italic">게시일자: 2026년 5월 11일</p>
             </div>
           </div>
         </div>
@@ -439,42 +439,42 @@ export default function App() {
                 <form className="space-y-4" onSubmit={handleSubmit}>
                   <div>
                     <label className="block text-sm font-medium text-slate-400 mb-1">회사명 / 담당자명</label>
-                    <input 
-                      type="text" 
+                    <input
+                      type="text"
                       name="name"
                       value={formData.name}
                       onChange={handleChange}
-                      className="w-full bg-[#0B1120] border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors" 
-                      placeholder="예: (주)딥마인 / 홍길동" 
-                      required 
+                      className="w-full bg-[#0B1120] border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+                      placeholder="예: (주)딥마인 / 홍길동"
+                      required
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-slate-400 mb-1">이메일</label>
-                    <input 
-                      type="email" 
+                    <input
+                      type="email"
                       name="email"
                       value={formData.email}
                       onChange={handleChange}
-                      className="w-full bg-[#0B1120] border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors" 
-                      placeholder="company@email.com" 
-                      required 
+                      className="w-full bg-[#0B1120] border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+                      placeholder="company@email.com"
+                      required
                     />
                   </div>
                   <div>
                     <label className="block text-sm font-medium text-slate-400 mb-1">문의 내용</label>
-                    <textarea 
+                    <textarea
                       name="message"
                       value={formData.message}
                       onChange={handleChange}
-                      rows="4" 
-                      className="w-full bg-[#0B1120] border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors" 
-                      placeholder="도입을 희망하시는 데이터 분야나 솔루션에 대해 간략히 적어주세요." 
+                      rows="4"
+                      className="w-full bg-[#0B1120] border border-slate-700 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-colors"
+                      placeholder="도입을 희망하시는 데이터 분야나 솔루션에 대해 간략히 적어주세요."
                       required
                     ></textarea>
                   </div>
-                  <button 
-                    type="submit" 
+                  <button
+                    type="submit"
                     disabled={status === 'loading'}
                     className={`w-full ${status === 'loading' ? 'bg-blue-800' : 'bg-blue-600 hover:bg-blue-700'} text-white font-medium py-3 px-4 rounded-lg transition-colors flex items-center justify-center`}
                   >
@@ -518,8 +518,8 @@ export default function App() {
               <ul className="space-y-4 text-sm text-slate-400">
                 {['About', 'Solutions', 'History', 'Contact'].map((item) => (
                   <li key={item}>
-                    <button 
-                      onClick={() => scrollToSection(item.toLowerCase())} 
+                    <button
+                      onClick={() => scrollToSection(item.toLowerCase())}
                       className="hover:text-blue-400 transition-colors"
                     >
                       {item}
@@ -534,7 +534,7 @@ export default function App() {
               <h4 className="text-white font-bold mb-6">Legal</h4>
               <ul className="space-y-4 text-sm text-slate-400">
                 <li>
-                  <button 
+                  <button
                     onClick={() => setIsPrivacyModalOpen(true)}
                     className="hover:text-blue-400 transition-colors font-bold text-slate-300"
                   >
@@ -542,7 +542,7 @@ export default function App() {
                   </button>
                 </li>
                 <li>
-                  <button 
+                  <button
                     onClick={() => setIsEmailModalOpen(true)}
                     className="hover:text-blue-400 transition-colors"
                   >
