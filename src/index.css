@@ -1,13 +1,49 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-gov-dynamic-subset.min.css");
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:wght@100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  color-scheme: dark;
+@layer base {
+  :root {
+    --primary: 221 83% 53%; /* #1D4ED8 */
+    --accent: 191 78% 64%; /* #5ACAE8 */
+    --background: 210 20% 98%; /* #F8FAFC */
+    --canvas-cream: 48 24% 97%; /* #FAF9F5 */
+    --surface: 0 0% 100%; /* #FFFFFF */
+    --border: 214 32% 91%; /* #E2E8F0 */
+    --text-ink: 60 3% 8%; /* #141413 */
+    
+    color-scheme: light;
+  }
+
+  .dark {
+    --primary: 217 91% 60%; /* #3B82F6 */
+    --accent: 191 78% 64%; /* #5ACAE8 */
+    --background: 222 47% 11%; /* #0B1120 */
+    --canvas-cream: 222 35% 15%; /* #1E2533 */
+    --surface: 217 33% 17%; /* #1E293B */
+    --border: 215 25% 27%; /* #334155 */
+    --text-ink: 210 20% 98%; /* #F8FAFC */
+    
+    color-scheme: dark;
+  }
+  
+  body {
+    margin: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: hsl(var(--background));
+    color: hsl(var(--text-ink));
+    font-family: Pretendard, Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  }
 }
 
-body {
-  margin: 0;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+/* 글자 크기 스케일 (KRDS 규격 대응) */
+.scale-small { font-size: 14px; }
+.scale-medium { font-size: 16px; }
+.scale-large { font-size: 18px; }
+.scale-xlarge { font-size: 20px; }
+.scale-xxlarge { font-size: 22px; }
+
