@@ -18,9 +18,9 @@ const COMPANY_INFO = {
 };
 
 const STATS = [
-  { label: '초기 도입 직접 절감액', value: '약 38억 원', desc: '2019년 모델 구축 초기 가동 단계에서 재고 과다/부족 문제 최소화로 이룬 공급망 재고 비용 직접 절감액.' },
+  { label: '초기 도입 직접 절감액', value: '수 십억원', desc: '2019년 모델 구축 초기 SCM 가동 단계에서 재고 과다/부족 문제 최소화로 이룬 공급망 직접 절감 실적.' },
   { label: '안정적 장기 예측 정확도', value: '84.7 %', desc: '과거 24개월 이력 데이터 축적 시 달성되는 향후 최대 7년(84개월) 장기 소요량 예측 수렴 정확도.' },
-  { label: '신규 제품(NPI) 초기 적중률', value: '70% 이상', desc: '과거 판매 데이터가 전무한 초기 론칭 상황(3개월)에서도 높은 사용률 예측으로 결품/과잉 발주 방어.' }
+  { label: 'LTB 적중률', value: '70% 이상', desc: '과거 판매 데이터가 전무한 초기 론칭 상황(3개월)에서도 높은 LTB 소요율 예측으로 결품/과잉 발주 방어.' }
 ];
 
 const PIPELINE = [
@@ -86,6 +86,7 @@ const PROJECTS = [
 const HISTORY = [
   { year: '2026. 03 ~', title: '2026 AI바우처 지원사업 공급기업 등록' },
   { year: '2023. 10', title: '서비스 자재 수요예측 GPU 실사용 적용' },
+  { year: '2023. 07', title: '서비스 자재 수요예측 전용 GPU 인프라 도입 완료' },
   { year: '2022. 09', title: '서비스 자재 수요예측 GPU 도입 PoC' },
   { year: '2021. 12', title: '(주)딥마인 법인 설립' },
   { year: '2020. 01 ~', title: '삼성전자 ASAP 데이터 과학자 지원 (수요예측 정확도 개선 운영)' },
@@ -212,7 +213,6 @@ export default function App() {
   const paddingX = 60;
   const paddingY = 40;
 
-  // 값의 매핑 (Y축: 70 ~ 90, X축: 8개 포인트)
   const getCoordinates = () => {
     return ACCURACY_DATA.map((d, i) => {
       const x = paddingX + (i / (ACCURACY_DATA.length - 1)) * (svgWidth - paddingX * 2);
@@ -223,11 +223,9 @@ export default function App() {
 
   const points = getCoordinates();
   
-  // SVG 라인 패스 생성 (Smooth Curve - Catmull-Rom 기법 약식 적용)
   const linePath = points.reduce((path, p, i) => {
     if (i === 0) return `M ${p.x} ${p.y}`;
     const prev = points[i - 1];
-    // 부드러운 곡선을 위해 조절점 계산
     const cpX1 = prev.x + (p.x - prev.x) / 3;
     const cpY1 = prev.y;
     const cpX2 = prev.x + 2 * (p.x - prev.x) / 3;
@@ -235,12 +233,10 @@ export default function App() {
     return `${path} C ${cpX1} ${cpY1}, ${cpX2} ${cpY2}, ${p.x} ${p.y}`;
   }, '');
 
-  // 차트 면적 채우기 패스 생성
   const areaPath = points.length > 0 
     ? `${linePath} L ${points[points.length - 1].x} ${svgHeight - paddingY} L ${points[0].x} ${svgHeight - paddingY} Z`
     : '';
 
-  // 필터링된 프로젝트 데이터
   const filteredProjects = PROJECTS.filter(p => {
     if (projectFilter === 'all') return true;
     return p.cat === projectFilter;
@@ -258,10 +254,8 @@ export default function App() {
       <nav className="fixed top-0 w-full h-20 z-50 bg-background/80 backdrop-blur-md border-b border-border/60 transition-colors duration-300">
         <div className="max-w-[1200px] mx-auto h-full px-4 sm:px-6 lg:px-8 flex justify-between items-center">
           <div className="flex-shrink-0 flex items-center cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
-            <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center mr-3 font-bold text-white tracking-tighter shadow-sm">
-              DM
-            </div>
-            <span className="font-bold text-2xl tracking-tight text-ink">DeepMine</span>
+            <img src="/딥마인 logo.png" alt="딥마인 로고" className="w-8 h-8 mr-3 object-contain" />
+            <img src={isDarkMode ? '/deepmine logo white.png' : '/deepmine logo dark.png'} alt="DeepMine" className="h-5 object-contain" />
           </div>
 
           {/* 데스크탑 메뉴 */}
@@ -625,7 +619,7 @@ export default function App() {
           <div className="max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <span className="text-primary font-bold tracking-wider uppercase text-xs">Advanced AI Architecture</span>
-              <h2 class="text-3xl md:text-4xl font-serif font-normal tracking-tight text-ink mt-2 mb-4">파운데이션 모델 및 예측 엔진군</h2>
+              <h2 className="text-3xl md:text-4xl font-serif font-normal tracking-tight text-ink mt-2 mb-4">파운데이션 모델 및 예측 엔진군</h2>
               <div className="w-16 h-0.5 bg-primary mx-auto mb-6"></div>
               <p className="text-lg text-ink/70 max-w-2xl mx-auto">
                 딥마인은 초대형 사전 학습 시계열 Zero-shot 모델과 고성능 딥러닝 알고리즘을 융합하여 정밀한 예측력을 제공합니다.
@@ -677,16 +671,35 @@ export default function App() {
                   </div>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                  {MODELS.map((model, i) => (
-                    <div key={i} className="bg-surface border border-border p-6 rounded-lg flex flex-col hover:border-primary/50 transition-colors duration-300">
-                      <div className="bg-background w-14 h-14 rounded-lg flex items-center justify-center mb-5 shrink-0">
-                        {model.icon}
+                <div className="space-y-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {MODELS.map((model, i) => (
+                      <div key={i} className="bg-surface border border-border p-6 rounded-lg flex flex-col hover:border-primary/50 transition-colors duration-300">
+                        <div className="bg-background w-14 h-14 rounded-lg flex items-center justify-center mb-5 shrink-0">
+                          {model.icon}
+                        </div>
+                        <h4 className="font-bold text-base text-ink mb-2">{model.title}</h4>
+                        <p className="text-xs text-ink/75 leading-relaxed">{model.desc}</p>
                       </div>
-                      <h4 className="font-bold text-base text-ink mb-2">{model.title}</h4>
-                      <p className="text-xs text-ink/75 leading-relaxed">{model.desc}</p>
+                    ))}
+                  </div>
+                  
+                  {/* 로컬 모델 vs 글로벌 모델 패러다임 전환 패널 (교육자료 PDF P.31 반영) */}
+                  <div className="bg-surface border border-border/80 rounded-lg p-6 sm:p-8 shadow-sm">
+                    <h4 className="font-bold text-sm text-ink mb-4 flex items-center gap-2">
+                      <span className="text-primary font-bold">💡 패러다임의 전환 :</span> 로컬 모델에서 글로벌 모델로
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-xs text-ink/80 leading-relaxed">
+                      <div className="bg-background border border-border/60 p-5 rounded-md">
+                        <strong className="text-slate-500 block mb-2 font-bold">로컬 모델 (Local Models) — ARIMA, ETS 등</strong>
+                        <p>각 시계열 데이터를 개별적으로 분리하여 모델링합니다. 수만 개 이상의 대규모 SKU(상품 품목) 환경에서는 수작업 피처 엔지니어링과 매개변수 튜닝이 필수적이며 관리가 매우 비효율적입니다.</p>
+                      </div>
+                      <div className="bg-background border border-primary/20 p-5 rounded-md">
+                        <strong className="text-primary block mb-2 font-bold">글로벌 모델 (Global Models) — 신경망 기반 아키텍처</strong>
+                        <p>단 하나의 신경망 모델로 수많은 시계열 데이터 전반에 흐르는 공통된 패턴(압축 표현)을 동시에 학습합니다. 복잡한 상호작용과 대용량 데이터를 한 번에 처리할 수 있어, 개별적인 수작업 튜닝 없이도 압도적으로 강력하고 일관된 장기 예측을 실현합니다.</p>
+                      </div>
                     </div>
-                  ))}
+                  </div>
                 </div>
               )}
             </div>
@@ -805,9 +818,9 @@ export default function App() {
                   </p>
                 </div>
                 <div>
-                  <span className="text-primary font-bold text-xs block mb-1">💡 최대 7년 후의 장기 예측 정밀도</span>
+                  <span className="text-primary font-bold text-xs block mb-1">💡 LTB 적중률과 최대 7년 장기 안정성</span>
                   <p className="text-xs text-ink/75 leading-relaxed">
-                    최장기 단계인 78개월 활용 예측에서도 **81.7%**의 높은 정밀도를 유지하여 장기 부품 조달 계획 수립에 즉각 연계 가능합니다.
+                    최장기 단계인 78개월 활용 예측에서도 **81.7%**의 높은 정밀도를 유지하며, 신규 자재 론칭 시에도 **70% 이상의 LTB 적중률**을 발휘합니다.
                   </p>
                 </div>
               </div>
@@ -1047,8 +1060,8 @@ export default function App() {
             {/* 브랜드 정보 */}
             <div className="col-span-1 md:col-span-2">
               <div className="flex items-center mb-4">
-                <div className="w-8 h-8 rounded-md bg-primary flex items-center justify-center mr-3 font-bold text-white text-sm">DM</div>
-                <span className="font-bold text-2xl text-white">DeepMine</span>
+                <img src="/딥마인 logo.png" alt="딥마인 로고" className="w-8 h-8 mr-3 object-contain" />
+                <img src="/deepmine logo white.png" alt="DeepMine" className="h-5 object-contain" />
               </div>
               <p className="text-slate-400 text-sm leading-relaxed max-w-sm">
                 제조/유통/금융 데이터 분석 및 인공 지능 개발 전문 기업입니다.
