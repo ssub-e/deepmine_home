@@ -276,7 +276,7 @@ export default function App() {
         <div className="max-w-[1200px] mx-auto h-full px-4 sm:px-6 lg:px-8 flex justify-between items-center">
           <div className="flex-shrink-0 flex items-center cursor-pointer" onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
             <img src="/logotest.png" alt="딥마인 로고" className="w-8 h-8 mr-3 object-contain" />
-            <img src={isDarkMode ? '/deepmine logo light.png' : '/deepmine logo dark.png'} alt="DeepMine" className="h-5 object-contain" />
+            <img src={isDarkMode ? '/deepmine logo dark.png' : '/deepmine logo light.png'} alt="DeepMine" className="h-7 object-contain" />
           </div>
 
           {/* 데스크탑 메뉴 */}
@@ -835,13 +835,13 @@ export default function App() {
                 <div>
                   <span className="text-primary font-bold text-xs block mb-1">💡 24개월 시점의 안정화 임계점</span>
                   <p className="text-xs text-ink/75 leading-relaxed">
-                    이력 데이터가 최소 24개월 이상 안정적으로 누적되는 시점부터 **84%대의 고도의 안정적인 정확도 구간**으로 수렴합니다.
+                    이력 데이터가 최소 24개월 이상 안정적으로 누적되는 시점부터 <strong className="font-bold">84%대의 고도의 안정적인 정확도 구간</strong>으로 수렴합니다.
                   </p>
                 </div>
                 <div>
                   <span className="text-primary font-bold text-xs block mb-1">💡 LTB 적중률과 최대 7년 장기 안정성</span>
                   <p className="text-xs text-ink/75 leading-relaxed">
-                    최장기 단계인 78개월 활용 예측에서도 **81.7%**의 높은 정밀도를 유지하며, 신규 자재 론칭 시에도 **70% 이상의 LTB 적중률**을 발휘합니다.
+                    최장기 단계인 78개월 활용 예측에서도 <strong className="font-bold">81.7%</strong>의 높은 정밀도를 유지하며, 신규 자재 론칭 시에도 <strong className="font-bold">70% 이상의 LTB 적중률</strong>을 발휘합니다.
                   </p>
                 </div>
               </div>
@@ -1082,7 +1082,7 @@ export default function App() {
             <div className="col-span-1 md:col-span-2">
               <div className="flex items-center mb-4">
                 <img src="/logotest.png" alt="딥마인 로고" className="w-8 h-8 mr-3 object-contain" />
-                <img src="/deepmine logo light.png" alt="DeepMine" className="h-5 object-contain" />
+                <img src="/deepmine logo dark.png" alt="DeepMine" className="h-7 object-contain" />
               </div>
               <p className="text-ink/60 text-sm leading-relaxed max-w-sm">
                 제조/유통/금융 데이터 분석 및 인공 지능 개발 전문 기업입니다.
