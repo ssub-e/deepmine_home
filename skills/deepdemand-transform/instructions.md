@@ -1,6 +1,6 @@
 # Skill: deepdemand-transform (디자인 시스템 변환 및 코드 마이그레이션)
 
-본 스킬은 기획안([Plan Blueprint](file:///c:/Users/김준섭/Desktop/workspace/DeepDemand-project-root/deepmine_home/skills/deepdemand-plan/instructions.md))을 바탕으로, 기존의 하드코딩된 테일윈드 스타일이나 기존 웹 소스코드(`App.jsx` 등)를 **DeepDemand 디자인 시스템(DDDS) 및 KRDS 웹 접근성 규격으로 전환**하는 마이그레이션 실무 지침입니다.
+본 스킬은 기획안([Plan Blueprint](../deepdemand-plan/instructions.md))을 바탕으로, 기존의 하드코딩된 테일윈드 스타일이나 기존 웹 소스코드(`App.jsx` 등)를 **DeepDemand 디자인 시스템(DDDS) 및 KRDS 웹 접근성 규격으로 전환**하는 마이그레이션 실무 지침입니다.
 
 ---
 

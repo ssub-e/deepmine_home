@@ -1,6 +1,6 @@
 # Skill: deepdemand-improve (자동 품질 검증 및 하드닝 워크플로우)
 
-본 스킬은 변환 단계([Transform Phase](file:///c:/Users/김준섭/Desktop/workspace/DeepDemand-project-root/deepmine_home/skills/deepdemand-transform/instructions.md))를 거쳐 1차 구현이 완료된 소스코드를 정밀하게 분석하고, 규격 준수 여부를 채점하여 **기준 점수(95점 이상)를 통과할 때까지 소스코드를 스스로 교정(Hardening)하는 자동화 루프 스킬**입니다.
+본 스킬은 변환 단계([Transform Phase](../deepdemand-transform/instructions.md))를 거쳐 1차 구현이 완료된 소스코드를 정밀하게 분석하고, 규격 준수 여부를 채점하여 **기준 점수(95점 이상)를 통과할 때까지 소스코드를 스스로 교정(Hardening)하는 자동화 루프 스킬**입니다.
 
 ---
 
@@ -54,7 +54,7 @@
 
 1. **로그 생성**: 검출된 위반 코드가 몇 번째 줄(Line)에 어떤 요소를 포함하고 있는지 기록합니다.
    * *예*: `[DEDUCT -5] App.jsx:L107: bg-[#0B1120] 사용 - 하드코딩 컬러 감점`
-2. **패치 코드 생성**: 디자인 명세서([DESIGN.md](file:///c:/Users/김준섭/Desktop/workspace/DeepDemand-project-root/deepmine_home/DESIGN.md))의 토큰에 맞춘 코드 교체 척도를 설계합니다.
+2. **패치 코드 생성**: 디자인 명세서([DESIGN.md](../../DESIGN.md))의 토큰에 맞춘 코드 교체 척도를 설계합니다.
    * *예*: `bg-[#0B1120]` ➔ `bg-background`
 3. **정밀 수정 도구 사용**: `replace_file_content` 또는 `multi_replace_file_content` 도구를 사용해 해당 소스코드를 정확히 수정합니다.
 4. **리빌드 및 테스트**: 수정이 완료되면 `npm run build` 명령을 실행해 정적 타입 빌드 및 포스트 프로세서(PostCSS) 컴파일 과정에서 오류가 발생하지 않는지 체크합니다.
